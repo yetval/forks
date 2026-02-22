@@ -18,8 +18,8 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
     if (timeLeft.total <= 0) {
         return (
             <div className="text-center">
-                <p className="text-xl font-extralight uppercase tracking-[0.3em] text-zinc-300">{label}</p>
-                <p className="mt-4 text-8xl font-bold text-white" style={{ textShadow: '0 0 60px rgba(198, 40, 40, 0.6)' }}>
+                <p className="text-xl font-extralight uppercase tracking-widest text-zinc-300">{label}</p>
+                <p className="mt-4 text-8xl font-bold text-white">
                     NOW
                 </p>
             </div>
@@ -28,7 +28,7 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
 
     return (
         <div className="text-center">
-            <p className="text-xl font-extralight uppercase tracking-[0.3em] text-zinc-300">{label}</p>
+            <p className="text-xl font-extralight uppercase tracking-widest text-zinc-300">{label}</p>
             <div className="mt-6 flex items-center justify-center gap-6">
                 <TimeUnit value={timeLeft.days} label="Days" />
                 <Separator />
@@ -47,11 +47,10 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
         <div className="flex flex-col items-center">
             <span
                 className="text-7xl font-bold tabular-nums text-white"
-                style={{ textShadow: '0 0 40px rgba(198, 40, 40, 0.4)' }}
             >
                 {String(value).padStart(2, '0')}
             </span>
-            <span className="mt-2 text-sm font-extralight uppercase tracking-[0.2em] text-zinc-500">{label}</span>
+            <span className="mt-2 text-sm font-extralight uppercase tracking-wider text-zinc-500">{label}</span>
         </div>
     );
 }

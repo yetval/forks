@@ -5,15 +5,31 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/door-with-frame-2f2f149f3ec44d658a02c1f924dfa449
 Title: Door with frame
 */
-
 import { useGLTF } from '@react-three/drei';
 import type { ThreeElements } from '@react-three/fiber';
 import { useEffect } from 'react';
+import type * as THREE from 'three';
+import type { GLTF } from 'three-stdlib';
 
 type DoorProps = ThreeElements['group'] & { opacity?: number };
 
+type GLTFResult = GLTF & {
+    nodes: {
+        Plane002_Glossy_0: THREE.Mesh;
+        Plane002_Door_0: THREE.Mesh;
+        Plane001_Glossy_0: THREE.Mesh;
+        Plane001_Door_0: THREE.Mesh;
+        Plane003_Door_0: THREE.Mesh;
+        Circle002_Glossy_0: THREE.Mesh;
+    };
+    materials: {
+        Glossy: THREE.MeshStandardMaterial;
+        Door: THREE.MeshStandardMaterial;
+    };
+};
+
 export default function Door({ opacity = 1, ...props }: DoorProps) {
-    const { nodes, materials } = useGLTF('/door_with_frame.glb');
+    const { nodes, materials } = useGLTF('/door_with_frame.glb') as unknown as GLTFResult;
 
     useEffect(() => {
         Object.values(materials).forEach((mat) => {
@@ -28,46 +44,48 @@ export default function Door({ opacity = 1, ...props }: DoorProps) {
     }, [materials, opacity]);
 
     return (
-        <group {...props} dispose={null} scale={3}>
-            <mesh
-                castShadow
-                receiveShadow
-                geometry={nodes.Plane002_Glossy_0.geometry}
-                material={materials.Glossy}
-            />
-            <mesh
-                castShadow
-                receiveShadow
-                geometry={nodes.Plane002_Door_0.geometry}
-                material={materials.Door}
-            />
-            <group position={[-0.435, -0.101, 0.249]}>
+        <group {...props} dispose={null}>
+            <group scale={3}>
                 <mesh
                     castShadow
                     receiveShadow
-                    geometry={nodes.Plane001_Glossy_0.geometry}
+                    geometry={nodes.Plane002_Glossy_0.geometry}
                     material={materials.Glossy}
                 />
                 <mesh
                     castShadow
                     receiveShadow
-                    geometry={nodes.Plane001_Door_0.geometry}
+                    geometry={nodes.Plane002_Door_0.geometry}
                     material={materials.Door}
                 />
-                <mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.Plane003_Door_0.geometry}
-                    material={materials.Door}
-                    position={[0.852, 0.017, 0.782]}
-                />
-                <mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.Circle002_Glossy_0.geometry}
-                    material={materials.Glossy}
-                    position={[0.81, 0.043, 0.803]}
-                />
+                <group position={[-0.435, -0.101, 0.249]}>
+                    <mesh
+                        castShadow
+                        receiveShadow
+                        geometry={nodes.Plane001_Glossy_0.geometry}
+                        material={materials.Glossy}
+                    />
+                    <mesh
+                        castShadow
+                        receiveShadow
+                        geometry={nodes.Plane001_Door_0.geometry}
+                        material={materials.Door}
+                    />
+                    <mesh
+                        castShadow
+                        receiveShadow
+                        geometry={nodes.Plane003_Door_0.geometry}
+                        material={materials.Door}
+                        position={[0.852, 0.017, 0.782]}
+                    />
+                    <mesh
+                        castShadow
+                        receiveShadow
+                        geometry={nodes.Circle002_Glossy_0.geometry}
+                        material={materials.Glossy}
+                        position={[0.81, 0.043, 0.803]}
+                    />
+                </group>
             </group>
         </group>
     );

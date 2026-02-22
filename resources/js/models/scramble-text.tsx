@@ -44,7 +44,7 @@ export default function ScrambleText(props: ThreeElements['group']) {
         <group {...props}>
             <Text
                 fontSize={0.12}
-                color="#C62828"
+                color="#b91c1c"
                 anchorX="center"
                 anchorY="middle"
                 fontWeight="bold"
