@@ -1,7 +1,11 @@
-import React, { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
+import { ThreeElements } from '@react-three/fiber';
+import React, { JSX, useRef } from 'react';
 
-export default function Fork(props) {
+
+
+type GroupProps = ThreeElements['group']
+export default function Fork(props: GroupProps) {
     const { nodes, materials } = useGLTF('/plastic_fork.glb');
     return (
         <group {...props} dispose={null}>
