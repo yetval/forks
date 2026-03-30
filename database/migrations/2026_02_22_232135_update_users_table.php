@@ -17,9 +17,7 @@ return new class extends Migration
 
             // Profile fields
             $table->string('nickname')->nullable()->after('email');
-            $table->string('first_name')->nullable()->after('nickname');
-            $table->string('last_name')->nullable()->after('first_name');
-            $table->string('phone')->nullable()->after('last_name');
+            $table->string('phone')->nullable()->after('nickname');
             $table->string('dorm_location')->nullable()->after('phone');
             $table->string('grade_year')->nullable()->after('dorm_location');
             $table->boolean('profile_completed')->default(false)->after('grade_year');
@@ -44,8 +42,6 @@ return new class extends Migration
             $table->dropColumn([
                 'google_id',
                 'nickname',
-                'first_name',
-                'last_name',
                 'phone',
                 'dorm_location',
                 'grade_year',

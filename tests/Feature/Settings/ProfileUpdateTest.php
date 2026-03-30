@@ -1,25 +1,78 @@
 <?php
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('profile page is displayed', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'profile_completed' => true,
+    ]);
 
     $response = $this
         ->actingAs($user)
         ->get(route('profile.edit'));
 
-    $response->assertOk();
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('settings/profile')
+            ->where('isProfileComplete', true)
+        );
 });
 
-test('profile information can be updated', function () {
-    $user = User::factory()->create();
+test('incomplete users are redirected to the unified profile page', function () {
+    $user = User::factory()->create([
+        'profile_completed' => false,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertRedirect(route('profile.edit'));
+});
+
+test('incomplete users can complete their profile', function () {
+    $user = User::factory()->create([
+        'profile_completed' => false,
+    ]);
 
     $response = $this
         ->actingAs($user)
         ->patch(route('profile.update'), [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'nickname' => 'Night Owl',
+            'phone' => '(555) 555-5555',
+            'dorm_location' => '3rd North',
+            'grade_year' => 'Junior',
+        ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('dashboard'));
+
+    $user->refresh();
+
+    expect($user->nickname)->toBe('Night Owl');
+    expect($user->phone)->toBe('(555) 555-5555');
+    expect($user->dorm_location)->toBe('3rd North');
+    expect($user->grade_year)->toBe('Junior');
+    expect($user->profile_completed)->toBeTrue();
+});
+
+test('completed users can update their profile information', function () {
+    $user = User::factory()->create([
+        'nickname' => 'Original',
+        'phone' => '(111) 111-1111',
+        'dorm_location' => '2nd South',
+        'grade_year' => 'Senior',
+        'profile_completed' => true,
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->patch(route('profile.update'), [
+            'nickname' => 'Updated Nickname',
+            'phone' => '(222) 222-2222',
+            'dorm_location' => '4th North',
+            'grade_year' => 'Junior',
         ]);
 
     $response
@@ -28,58 +81,25 @@ test('profile information can be updated', function () {
 
     $user->refresh();
 
-    expect($user->name)->toBe('Test User');
-    expect($user->email)->toBe('test@example.com');
-    expect($user->email_verified_at)->toBeNull();
+    expect($user->nickname)->toBe('Updated Nickname');
+    expect($user->phone)->toBe('(222) 222-2222');
+    expect($user->dorm_location)->toBe('4th North');
+    expect($user->grade_year)->toBe('Junior');
 });
 
-test('email verification status is unchanged when the email address is unchanged', function () {
+test('profile update requires the remaining game fields', function () {
     $user = User::factory()->create();
 
-    $response = $this
-        ->actingAs($user)
-        ->patch(route('profile.update'), [
-            'name' => 'Test User',
-            'email' => $user->email,
-        ]);
-
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect(route('profile.edit'));
-
-    expect($user->refresh()->email_verified_at)->not->toBeNull();
-});
-
-test('user can delete their account', function () {
-    $user = User::factory()->create();
-
-    $response = $this
-        ->actingAs($user)
-        ->delete(route('profile.destroy'), [
-            'password' => 'password',
-        ]);
-
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect(route('home'));
-
-    $this->assertGuest();
-    expect($user->fresh())->toBeNull();
-});
-
-test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
-
-    $response = $this
-        ->actingAs($user)
+    $response = $this->actingAs($user)
         ->from(route('profile.edit'))
-        ->delete(route('profile.destroy'), [
-            'password' => 'wrong-password',
-        ]);
+        ->patch(route('profile.update'), []);
 
     $response
-        ->assertSessionHasErrors('password')
+        ->assertSessionHasErrors([
+            'nickname',
+            'phone',
+            'dorm_location',
+            'grade_year',
+        ])
         ->assertRedirect(route('profile.edit'));
-
-    expect($user->fresh())->not->toBeNull();
 });

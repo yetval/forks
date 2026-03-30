@@ -2,7 +2,6 @@
 
 namespace App\Concerns;
 
-use App\Models\User;
 use Illuminate\Validation\Rule;
 
 trait ProfileValidationRules
@@ -15,36 +14,39 @@ trait ProfileValidationRules
     protected function profileRules(?int $userId = null): array
     {
         return [
-            'name' => $this->nameRules(),
-            'email' => $this->emailRules($userId),
+            'nickname' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:20'],
+            'dorm_location' => ['required', 'string', Rule::in($this->dormLocations())],
+            'grade_year' => ['required', 'string', Rule::in($this->gradeYears())],
         ];
     }
 
     /**
-     * Get the validation rules used to validate user names.
+     * Get the supported dorm locations.
      *
-     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
+     * @return list<string>
      */
-    protected function nameRules(): array
-    {
-        return ['required', 'string', 'max:255'];
-    }
-
-    /**
-     * Get the validation rules used to validate user emails.
-     *
-     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
-     */
-    protected function emailRules(?int $userId = null): array
+    protected function dormLocations(): array
     {
         return [
-            'required',
-            'string',
-            'email',
-            'max:255',
-            $userId === null
-                ? Rule::unique(User::class)
-                : Rule::unique(User::class)->ignore($userId),
+            '1st South',
+            '2nd South',
+            '3rd South',
+            '4th South',
+            '2nd North',
+            '3rd North',
+            '4th North',
+            '5th North',
         ];
+    }
+
+    /**
+     * Get the supported grade years.
+     *
+     * @return list<string>
+     */
+    protected function gradeYears(): array
+    {
+        return ['Junior', 'Senior'];
     }
 }

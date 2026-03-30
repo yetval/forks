@@ -8,7 +8,7 @@ export default function Register() {
     return (
         <AuthLayout
             title="Create an account"
-            description="Enter your details below to create your account"
+            description="Use your Google account to join the game"
         >
             <Head title="Register" />
             <Button className="w-full" asChild>

@@ -16,8 +16,9 @@ class EnsureProfileCompleted
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
+
         if ($user && ! $user->profile_completed) {
-            return redirect()->route('profile.setup');
+            return redirect()->route('profile.edit');
         }
 
         return $next($request);

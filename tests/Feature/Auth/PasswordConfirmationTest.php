@@ -1,22 +1,7 @@
 <?php
 
-use App\Models\User;
-use Inertia\Testing\AssertableInertia as Assert;
+use Illuminate\Support\Facades\Route;
 
-test('confirm password screen can be rendered', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->get(route('password.confirm'));
-
-    $response->assertOk();
-
-    $response->assertInertia(fn (Assert $page) => $page
-        ->component('auth/confirm-password')
-    );
-});
-
-test('password confirmation requires authentication', function () {
-    $response = $this->get(route('password.confirm'));
-
-    $response->assertRedirect(route('login'));
+test('account deletion route is not registered', function () {
+    expect(Route::has('profile.destroy'))->toBeFalse();
 });
