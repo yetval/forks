@@ -13,8 +13,23 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('google_id')->unique()->after('id');
-            $table->string('room_number')->nullable()->after('email');
             $table->dropColumn('password');
+
+            // Profile fields
+            $table->string('nickname')->nullable()->after('email');
+            $table->string('first_name')->nullable()->after('nickname');
+            $table->string('last_name')->nullable()->after('first_name');
+            $table->string('phone')->nullable()->after('last_name');
+            $table->string('dorm_location')->nullable()->after('phone');
+            $table->string('grade_year')->nullable()->after('dorm_location');
+            $table->boolean('profile_completed')->default(false)->after('grade_year');
+
+            // Admin & game state
+            $table->boolean('is_admin')->default(false)->after('profile_completed');
+            $table->boolean('alive')->default(true)->after('is_admin');
+            $table->foreignId('current_target_id')->nullable()->after('alive')->constrained('users')->nullOnDelete();
+            $table->unsignedInteger('total_kills')->default(0)->after('current_target_id');
+            $table->foreignId('killed_by')->nullable()->after('total_kills')->constrained('users')->nullOnDelete();
         });
     }
 
@@ -24,7 +39,23 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['google_id', 'room_number']);
+            $table->dropForeign(['current_target_id']);
+            $table->dropForeign(['killed_by']);
+            $table->dropColumn([
+                'google_id',
+                'nickname',
+                'first_name',
+                'last_name',
+                'phone',
+                'dorm_location',
+                'grade_year',
+                'profile_completed',
+                'is_admin',
+                'alive',
+                'current_target_id',
+                'total_kills',
+                'killed_by',
+            ]);
             $table->string('password')->after('email');
         });
     }

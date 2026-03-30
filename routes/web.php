@@ -1,11 +1,19 @@
 <?php
 
+use App\Http\Controllers\ProfileSetupController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Socialite\Socialite;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('profile-setup', [ProfileSetupController::class, 'create'])
+        ->name('profile.setup');
+    Route::post('profile-setup', [ProfileSetupController::class, 'store'])
+        ->name('profile.setup.store');
+});
 
 Route::get('/home', function () {
     return Inertia::render('welcome', [
@@ -19,7 +27,7 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
     return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'profile.completed'])->name('dashboard');
 
 Route::get('/register', function () {
     return Inertia::render('auth/register');

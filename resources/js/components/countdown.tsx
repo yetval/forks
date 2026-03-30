@@ -18,9 +18,14 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
     if (timeLeft.total <= 0) {
         return (
             <div className="text-center">
-                <p className="text-xl font-extralight uppercase tracking-widest text-zinc-300">{label}</p>
-                <p className="mt-4 text-8xl font-bold text-white">
-                    NOW
+                <p className="text-sm font-extralight uppercase tracking-widest text-zinc-400">
+                    The game is
+                </p>
+                <p className="mt-2 text-8xl font-bold tracking-tight text-white">
+                    LIVE
+                </p>
+                <p className="mt-3 text-lg font-extralight text-zinc-400">
+                    Forks are out. Watch your back.
                 </p>
             </div>
         );

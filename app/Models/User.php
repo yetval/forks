@@ -22,7 +22,18 @@ class User extends Authenticatable
         'name',
         'email',
         'google_id',
-        'room_number',
+        'nickname',
+        'first_name',
+        'last_name',
+        'phone',
+        'dorm_location',
+        'grade_year',
+        'profile_completed',
+        'is_admin',
+        'alive',
+        'current_target_id',
+        'total_kills',
+        'killed_by',
     ];
 
     /**
@@ -46,6 +57,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
+            'profile_completed' => 'boolean',
+            'is_admin' => 'boolean',
+            'alive' => 'boolean',
         ];
     }
 }

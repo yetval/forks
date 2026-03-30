@@ -1,27 +1,58 @@
 import { Head, Link } from '@inertiajs/react';
-import { Scroll, ScrollControls } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import { Scroll, ScrollControls, useScroll } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
 import Countdown from '@/components/countdown';
+import HeroHeader from '@/components/hero-header';
 import { Button } from '@/components/ui/button';
 import MainScene from '@/scenes/main-scene';
 
 const GAME_START = new Date('2026-03-01T00:00:00');
 
+function HeroTitle() {
+    const ref = useRef<HTMLDivElement>(null!);
+    const scroll = useScroll();
+
+    useFrame(() => {
+        const fade = 1 - scroll.range(0, 2 / 9);
+        ref.current.style.opacity = String(fade);
+    });
+
+    return (
+        <div
+            ref={ref}
+            className="absolute top-0 flex h-screen w-full flex-col items-center justify-center pointer-events-none"
+        >
+            <p className="text-sm font-extralight uppercase tracking-[0.3em] text-zinc-400">
+                NCSSM Morganton
+            </p>
+            <h1 className="mt-2 text-[10rem] leading-none font-bold tracking-tighter text-white uppercase">
+                FORKS
+            </h1>
+        </div>
+    );
+}
+
 export default function Hero() {
     return (
         <>
-            <Head title="Hero">
+            <Head title="NCSSM Morganton Forks">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
                     rel="stylesheet"
                 />
             </Head>
+
+            <HeroHeader />
+
             <div className="relative h-screen w-screen">
-                <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+                <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
                     <ScrollControls pages={9} damping={0.1}>
                         <MainScene />
                         <Scroll className={'w-screen'} html>
+                            <HeroTitle />
+
                             <div className="absolute top-[150vh] flex h-screen w-full items-center justify-center px-8">
                                 <p className="text-center text-xl font-extralight tracking-widest text-zinc-300 uppercase">
                                     One night, a fork will
@@ -66,22 +97,26 @@ export default function Hero() {
                                     <ul className="mt-6 space-y-3 text-lg leading-relaxed text-zinc-300">
                                         <li>
                                             — You get a fork with another
-                                            player's name — that's your target
+                                            student's name — that's your target
                                         </li>
                                         <li>
-                                            — Tap them on the shoulder with your
-                                            fork to eliminate them
+                                            — Lightly tap your target on the
+                                            shoulder with your fork to eliminate
+                                            them
                                         </li>
                                         <li>
                                             — Inherit their fork and their
                                             target
                                         </li>
-                                        <li>— Last one standing wins</li>
+                                        <li>
+                                            — Last one standing is crowned the
+                                            2026 Forks Champion
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
 
-                            {/* Page 7: Immunity */}
+                            {/* Page 7: Immunity & Safe Zones */}
                             <div className="absolute top-[600vh] flex h-screen w-1/2 items-center pl-16">
                                 <div>
                                     <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
@@ -92,50 +127,52 @@ export default function Hero() {
                                     </h2>
                                     <ul className="mt-6 space-y-3 text-lg leading-relaxed text-zinc-300">
                                         <li>
-                                            — Touch your fork to your nose to
+                                            — Touch any fork to your nose to
                                             become immune
                                         </li>
                                         <li>
-                                            — Must hold the fork with your palm
-                                            — no taping or clipping
+                                            — Hold it with your palm — no taping
+                                            or sticking it to your nose
                                         </li>
                                         <li>
-                                            — Any fork works for defense, not
-                                            just your assigned one
-                                        </li>
-                                        <li>
-                                            — You can't eliminate anyone while
-                                            immune
+                                            — It doesn't have to be your
+                                            assigned fork
                                         </li>
                                     </ul>
                                 </div>
                             </div>
 
-                            {/* Page 8: Don't be dumb */}
+                            {/* Page 8: Safe Zones */}
                             <div className="absolute top-[700vh] flex h-screen w-1/2 items-center pl-16">
                                 <div>
                                     <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                                         The rules
                                     </p>
                                     <h2 className="mt-2 text-5xl font-bold text-white">
-                                        Don't be dumb
+                                        Safe zones
                                     </h2>
                                     <ul className="mt-6 space-y-3 text-lg leading-relaxed text-zinc-300">
                                         <li>
-                                            — No running — injuries =
-                                            disqualification
+                                            — Your own dorm, bathrooms, and
+                                            showers
                                         </li>
                                         <li>
-                                            — Be gentle when eliminating people
+                                            — Classrooms during and 5 min
+                                            before/after class
                                         </li>
                                         <li>
-                                            — Broken fork? DM the Forkmaster for
-                                            a replacement
+                                            — Cafeteria during meal hours,
+                                            library, Fablab
                                         </li>
                                         <li>
-                                            — Disputes go to the Forkmaster,
-                                            whose decision is final
+                                            — SWAC while working out, music
+                                            rooms while practicing
                                         </li>
+                                        <li>
+                                            — Clubs, sports, and forums during
+                                            advertised hours
+                                        </li>
+                                        <li>— Everywhere off campus</li>
                                     </ul>
                                 </div>
                             </div>
@@ -143,9 +180,18 @@ export default function Hero() {
                             {/* Page 9: CTA + Countdown */}
                             <div className="absolute top-[800vh] flex h-screen w-full flex-col items-center justify-center">
                                 <Countdown target={GAME_START} />
-                                <Button asChild size="lg" className="mt-10">
-                                    <Link href="/register">Join the game</Link>
+                                <p className="mt-8 text-lg font-extralight tracking-wide text-zinc-400">
+                                    Don't get forked.
+                                </p>
+                                <Button asChild size="lg" className="mt-6">
+                                    <a href="/auth/google">Sign up with Google</a>
                                 </Button>
+                                <Link
+                                    href="/login"
+                                    className="mt-4 text-sm font-extralight text-zinc-500 underline underline-offset-4 transition hover:text-zinc-300"
+                                >
+                                    Already playing? Sign in
+                                </Link>
                             </div>
 
                             <div className="absolute top-[895vh] flex w-full items-center justify-center">
