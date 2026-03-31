@@ -41,7 +41,7 @@ export default function HeroHeader() {
                             <UserMenuContent user={auth.user} />
                         </DropdownMenuContent>
                     </DropdownMenu>
-                ) : game?.auth_open ? (
+                ) : game.auth_open ? (
                     <Button size="sm" asChild>
                         <a href="/login">Log in</a>
                     </Button>

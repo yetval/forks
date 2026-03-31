@@ -21,18 +21,31 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'google_id' => (string) fake()->unique()->numberBetween(10000, 99999),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'nickname' => fake()->userName(),
+            'phone' => fake()->phoneNumber(),
+            'dorm_location' => fake()->randomElement([
+                '1st South', '2nd South', '3rd South', '4th South',
+                '2nd North', '3rd North', '4th North', '5th North',
+            ]),
+            'grade_year' => fake()->randomElement(['junior', 'senior']),
+            'profile_completed' => false,
+            'is_admin' => false,
+            'alive' => true,
             'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function admin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'is_admin' => true,
+        ]);
+    }
+
+    public function profileCompleted(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'profile_completed' => true,
         ]);
     }
 }

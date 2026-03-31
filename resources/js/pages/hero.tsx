@@ -182,16 +182,8 @@ export default function Hero() {
                             {/* Page 9: CTA + Countdown */}
                             <div className="absolute top-[800vh] flex h-screen w-full flex-col items-center justify-center">
                                 <Countdown target={GAME_START} />
-                                {game ? (
-                                    <p className="mt-6 text-xs font-extralight tracking-[0.3em] text-zinc-500 uppercase">
-                                        Stage: {game.stage_label}
-                                    </p>
-                                ) : null}
-                                <p className="mt-8 text-lg font-extralight tracking-wide text-zinc-400">
-                                    Don't get forked.
-                                </p>
-                                <Button asChild={game?.auth_open} disabled={!game?.auth_open} size="lg" className="mt-6">
-                                    {game?.auth_open ? <a href="/login">Log in</a> : 'Logins are currently closed'}
+                                <Button asChild={game.auth_open} disabled={!game.auth_open} size="lg" className="mt-6">
+                                    {game.auth_open ? <a href="/login">Log in</a> : 'Logins are currently closed'}
                                 </Button>
                             </div>
 

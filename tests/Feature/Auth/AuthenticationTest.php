@@ -8,10 +8,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Socialite\Facades\Socialite;
 
 test('login screen can be rendered', function () {
-    Game::create([
-        'stage' => GameStage::Pregame,
-        'auth_open' => false,
-    ]);
 
     $response = $this->get(route('login'));
 
@@ -24,10 +20,7 @@ test('login screen can be rendered', function () {
 });
 
 test('login screen reflects closed auth', function () {
-    Game::create([
-        'stage' => GameStage::Running,
-        'auth_open' => false,
-    ]);
+    Game::current()->update(['stage' => GameStage::Running, 'auth_open' => false]);
 
     $this->get(route('login'))
         ->assertOk()
@@ -52,10 +45,7 @@ test('users can logout', function () {
 });
 
 test('no one can sign in through google when auth is closed', function () {
-    Game::create([
-        'stage' => GameStage::Running,
-        'auth_open' => false,
-    ]);
+    Game::current()->update(['stage' => GameStage::Running, 'auth_open' => false]);
 
     $googleUser = new class
     {
@@ -84,10 +74,7 @@ test('no one can sign in through google when auth is closed', function () {
 });
 
 test('existing users can sign in through google when auth is open', function () {
-    Game::create([
-        'stage' => GameStage::Running,
-        'auth_open' => true,
-    ]);
+    Game::current()->update(['stage' => GameStage::Running, 'auth_open' => true]);
 
     $user = User::factory()->create([
         'google_id' => 'existing-google-id',

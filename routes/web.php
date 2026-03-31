@@ -50,17 +50,21 @@ Route::get('/auth/google/callback', function () {
         ->orWhere('email', $googleUser->getEmail())
         ->first();
 
+    $isAdmin = in_array($googleUser->getEmail(), config('game.admin_emails'));
+
     if ($user) {
         $user->update([
             'google_id' => $googleUser->getId(),
             'name' => $googleUser->getName() ?: $user->name,
             'email' => $googleUser->getEmail() ?: $user->email,
+            'is_admin' => $isAdmin,
         ]);
     } else {
         $user = User::create([
             'google_id' => $googleUser->getId(),
             'name' => $googleUser->getName(),
             'email' => $googleUser->getEmail(),
+            'is_admin' => $isAdmin,
         ]);
     }
 

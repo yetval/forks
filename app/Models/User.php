@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -50,10 +51,19 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'profile_completed' => 'boolean',
             'is_admin' => 'boolean',
             'alive' => 'boolean',
         ];
+    }
+
+    public function currentTarget(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'current_target_id');
+    }
+
+    public function killedByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'killed_by');
     }
 }

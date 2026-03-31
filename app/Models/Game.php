@@ -28,7 +28,7 @@ class Game extends Model
 
     public static function current(): self
     {
-        return static::query()->first() ?? static::query()->create(static::defaultAttributes());
+        return static::query()->firstOrFail();
     }
 
     /**

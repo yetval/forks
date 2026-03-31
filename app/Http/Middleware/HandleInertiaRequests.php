@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -43,13 +42,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'game' => Schema::hasTable('games')
-                ? [
-                    'stage' => Game::current()->stage->value,
-                    'stage_label' => Game::current()->stage->label(),
-                    'auth_open' => Game::current()->authIsOpen(),
-                ]
-                : null,
+            'game' => [
+                'stage' => Game::current()->stage->value,
+                'stage_label' => Game::current()->stage->label(),
+                'auth_open' => Game::current()->authIsOpen(),
+            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

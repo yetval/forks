@@ -6,7 +6,7 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
-            game: GameState | null;
+            game: GameState;
             sidebarOpen: boolean;
             [key: string]: unknown;
         };

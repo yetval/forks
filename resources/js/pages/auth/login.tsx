@@ -16,8 +16,8 @@ export default function Login({ status }: { status?: string }) {
                     {status}
                 </div>
             ) : null}
-            <Button className="w-full" disabled={!game?.auth_open} asChild={game?.auth_open}>
-                {game?.auth_open ? <a href="/auth/google">Log in with Google</a> : 'Logins are currently closed'}
+            <Button className="w-full" disabled={!game.auth_open} asChild={game.auth_open}>
+                {game.auth_open ? <a href="/auth/google">Log in with Google</a> : 'Logins are currently closed'}
             </Button>
         </AuthLayout>
     );

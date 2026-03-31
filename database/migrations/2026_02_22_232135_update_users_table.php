@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('google_id')->unique()->after('id');
-            $table->dropColumn('password');
 
             // Profile fields
             $table->string('nickname')->nullable()->after('email');
@@ -52,7 +51,6 @@ return new class extends Migration
                 'total_kills',
                 'killed_by',
             ]);
-            $table->string('password')->after('email');
         });
     }
 };
