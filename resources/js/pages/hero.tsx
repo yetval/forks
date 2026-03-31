@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Scroll, ScrollControls, useScroll } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
@@ -34,6 +34,8 @@ function HeroTitle() {
 }
 
 export default function Hero() {
+    const { game } = usePage().props;
+
     return (
         <>
             <Head title="NCSSM Morganton Forks">
@@ -180,18 +182,17 @@ export default function Hero() {
                             {/* Page 9: CTA + Countdown */}
                             <div className="absolute top-[800vh] flex h-screen w-full flex-col items-center justify-center">
                                 <Countdown target={GAME_START} />
+                                {game ? (
+                                    <p className="mt-6 text-xs font-extralight tracking-[0.3em] text-zinc-500 uppercase">
+                                        Stage: {game.stage_label}
+                                    </p>
+                                ) : null}
                                 <p className="mt-8 text-lg font-extralight tracking-wide text-zinc-400">
                                     Don't get forked.
                                 </p>
-                                <Button asChild size="lg" className="mt-6">
-                                    <a href="/auth/google">Sign up with Google</a>
+                                <Button asChild={game?.auth_open} disabled={!game?.auth_open} size="lg" className="mt-6">
+                                    {game?.auth_open ? <a href="/login">Log in</a> : 'Logins are currently closed'}
                                 </Button>
-                                <Link
-                                    href="/login"
-                                    className="mt-4 text-sm font-extralight text-zinc-500 underline underline-offset-4 transition hover:text-zinc-300"
-                                >
-                                    Already playing? Sign in
-                                </Link>
                             </div>
 
                             <div className="absolute top-[895vh] flex w-full items-center justify-center">

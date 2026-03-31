@@ -1,17 +1,11 @@
 <?php
 
+use App\Models\Game;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
-use Laravel\Socialite\Socialite;
-
-Route::get('/home', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     return Inertia::render('hero');
@@ -21,8 +15,22 @@ Route::get('dashboard', function () {
     return Inertia::render('dashboard');
 })->middleware(['auth', 'profile.completed'])->name('dashboard');
 
+Route::get('/login', function () {
+    return Inertia::render('auth/login', [
+        'status' => session('status'),
+    ]);
+})->middleware('guest')->name('login');
+
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return to_route('hero');
+})->middleware('auth')->name('logout');
+
 Route::get('/register', function () {
-    return Inertia::render('auth/register');
+    return to_route('login');
 })->middleware('guest')->name('register');
 
 Route::get('/auth/google', function () {
@@ -30,15 +38,31 @@ Route::get('/auth/google', function () {
 })->name('auth.google');
 
 Route::get('/auth/google/callback', function () {
+    $game = Game::current();
     $googleUser = Socialite::driver('google')->user();
 
-    $user = User::firstOrCreate(
-        ['google_id' => $googleUser->getId()],
-        [
+    if (! $game->authIsOpen()) {
+        return to_route('login')->with('status', 'Logins are currently closed.');
+    }
+
+    $user = User::query()
+        ->where('google_id', $googleUser->getId())
+        ->orWhere('email', $googleUser->getEmail())
+        ->first();
+
+    if ($user) {
+        $user->update([
+            'google_id' => $googleUser->getId(),
+            'name' => $googleUser->getName() ?: $user->name,
+            'email' => $googleUser->getEmail() ?: $user->email,
+        ]);
+    } else {
+        $user = User::create([
+            'google_id' => $googleUser->getId(),
             'name' => $googleUser->getName(),
             'email' => $googleUser->getEmail(),
-        ],
-    );
+        ]);
+    }
 
     Auth::login($user);
 

@@ -11,7 +11,7 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 
 export default function HeroHeader() {
-    const { auth } = usePage().props;
+    const { auth, game } = usePage().props;
     const getInitials = useInitials();
 
     return (
@@ -41,16 +41,11 @@ export default function HeroHeader() {
                             <UserMenuContent user={auth.user} />
                         </DropdownMenuContent>
                     </DropdownMenu>
-                ) : (
-                    <>
-                        <Button variant="link" size="sm" asChild>
-                            <a href="/login">Sign in</a>
-                        </Button>
-                        <Button size="sm" asChild>
-                            <a href="/auth/google">Sign up</a>
-                        </Button>
-                    </>
-                )}
+                ) : game?.auth_open ? (
+                    <Button size="sm" asChild>
+                        <a href="/login">Log in</a>
+                    </Button>
+                ) : null}
             </div>
         </header>
     );
