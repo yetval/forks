@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\GameController;
+use App\Http\Controllers\Admin\UserController;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,12 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     return Inertia::render('dashboard');
 })->middleware(['auth', 'profile.completed'])->name('dashboard');
+
+Route::prefix('admin')->middleware(['auth', 'profile.completed', 'admin'])->group(function () {
+    Route::get('/players', [UserController::class, 'index'])->name('players');
+    Route::get('/game', [GameController::class, 'index'])->name('game');
+    Route::post('/game', [GameController::class, 'update'])->name('game.update');
+});
 
 Route::get('/login', function () {
     return Inertia::render('auth/login', [
