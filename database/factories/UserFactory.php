@@ -28,7 +28,7 @@ class UserFactory extends Factory
                 '2nd North', '3rd North', '4th North', '5th North',
             ]),
             'grade_year' => fake()->randomElement(['junior', 'senior']),
-            'profile_completed' => false,
+            'profile_completed' => true,
             'is_admin' => false,
             'alive' => true,
             'remember_token' => Str::random(10),
