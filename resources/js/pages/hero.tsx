@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Scroll, ScrollControls, useScroll } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
@@ -183,7 +183,7 @@ export default function Hero() {
                             <div className="absolute top-[800vh] flex h-screen w-full flex-col items-center justify-center">
                                 <Countdown target={GAME_START} />
                                 <Button asChild={game.auth_open} disabled={!game.auth_open} size="lg" className="mt-6">
-                                    {game.auth_open ? <a href="/login">Log in</a> : 'Logins are currently closed'}
+                                    {game.auth_open ? <Link href="/login">Log in</Link> : 'Logins are currently closed'}
                                 </Button>
                             </div>
 

@@ -1,7 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 import { Activity, type LucideIcon, MoonStar, ShieldMinus, Skull, Sun, Sunrise, Sword, Users } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
@@ -68,14 +68,14 @@ function StatCard({
 }) {
     return (
         <Card>
-            <CardHeader className="flex-row items-start justify-between gap-4 pb-3">
+            <CardHeader className="pb-3">
                 <div>
                     <CardDescription>{title}</CardDescription>
                     <CardTitle className="mt-2 text-3xl">{value}</CardTitle>
                 </div>
-                <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full">
+                <CardAction className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full self-center">
                     <Icon className="size-5" />
-                </div>
+                </CardAction>
             </CardHeader>
             <CardContent className="text-muted-foreground text-sm">
                 {description}
@@ -101,14 +101,14 @@ function SuperlativeCard({
 }) {
     return (
         <Card>
-            <CardHeader className="flex-row items-start justify-between gap-4 pb-3">
+            <CardHeader className="pb-3">
                 <div>
                     <CardDescription>{title}</CardDescription>
                     <CardTitle className="mt-2 truncate text-2xl">{label}</CardTitle>
                 </div>
-                <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full">
+                <CardAction className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full self-center">
                     <Icon className="size-5" />
-                </div>
+                </CardAction>
             </CardHeader>
             <CardContent className="space-y-1">
                 <p className="text-3xl font-semibold">{kills}</p>

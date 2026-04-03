@@ -98,7 +98,7 @@ export default function Targets({
 }
 
 function KilledView({ kill }: { kill: KillRecord | null }) {
-    const killerName = kill?.killer.nickname ?? kill?.killer.name ?? 'Unknown';
+    const killerName = kill?.killer.name ?? 'Unknown';
     const [showContestForm, setShowContestForm] = useState(false);
 
     return (
@@ -217,7 +217,7 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
                                 <SelectContent>
                                     {alivePlayers.map((player) => (
                                         <SelectItem key={player.id} value={String(player.id)}>
-                                            {player.nickname ?? player.name}
+                                            {player.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

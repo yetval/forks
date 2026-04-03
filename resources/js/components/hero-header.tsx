@@ -1,5 +1,4 @@
 import { Link, usePage } from '@inertiajs/react';
-import { dashboard, leaderboard } from '@/routes';
 import AppLogo from '@/components/app-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
+import { dashboard, leaderboard } from '@/routes';
 
 export default function HeroHeader() {
     const { auth, game } = usePage().props;
@@ -22,16 +22,20 @@ export default function HeroHeader() {
             </Link>
             <div className="flex items-center gap-3">
                 <Button variant="link" size="sm" asChild>
-                    <Link href={leaderboard().url}>Leaderboard</Link>
+                    <Link href={leaderboard().url} className="text-white hover:text-white">
+                        Leaderboard
+                    </Link>
                 </Button>
                 <Button variant="link" size="sm" asChild>
-                    <a href="/forks-game-rules.pdf" target="_blank">
+                    <a href="/forks-game-rules.pdf" target="_blank" className="text-white hover:text-white">
                         Rules
                     </a>
                 </Button>
                 {auth.user && (
                     <Button variant="link" size="sm" asChild>
-                        <Link href={dashboard().url}>Dashboard</Link>
+                        <Link href={dashboard().url} className="text-white hover:text-white">
+                            Dashboard
+                        </Link>
                     </Button>
                 )}
                 {auth.user ? (
@@ -52,7 +56,7 @@ export default function HeroHeader() {
                     </DropdownMenu>
                 ) : game.auth_open ? (
                     <Button size="sm" asChild>
-                        <a href="/login">Log in</a>
+                        <Link href="/login">Log in</Link>
                     </Button>
                 ) : null}
             </div>
