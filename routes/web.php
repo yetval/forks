@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\GameController;
+use App\Http\Controllers\Admin\KillController as AdminKillController;
 use App\Http\Controllers\Admin\TargetController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
@@ -32,6 +33,9 @@ Route::prefix('admin')->middleware(['auth', 'profile.completed', 'admin'])->grou
     Route::delete('/target-rules/{targetRule}', [TargetController::class, 'destroy'])->name('target-rules.destroy');
     Route::post('/targets/assign', [TargetController::class, 'assignTargets'])->name('targets.assign');
     Route::post('/targets/clear', [TargetController::class, 'clearTargets'])->name('targets.clear');
+    Route::get('/kills', [AdminKillController::class, 'index'])->name('kills');
+    Route::delete('/kills/{kill}', [AdminKillController::class, 'revert'])->name('kills.revert');
+    Route::post('/kills/{kill}/dismiss', [AdminKillController::class, 'dismiss'])->name('kills.dismiss');
 });
 
 Route::get('/login', function () {

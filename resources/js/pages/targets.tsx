@@ -1,12 +1,13 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Form, Head, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
-import KillController from '@/actions/App/Http/Controllers/KillController';
+import { approve, contest, store as killStore } from '@/actions/App/Http/Controllers/KillController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { targets } from '@/routes';
@@ -78,6 +79,7 @@ export default function Targets({ target, kill }: { target: Target | null; kill:
 
 function KilledView({ kill }: { kill: KillRecord | null }) {
     const killerName = kill?.killer.nickname ?? kill?.killer.name ?? 'Unknown';
+    const [showContestForm, setShowContestForm] = useState(false);
 
     return (
         <Card className="w-full max-w-md">
@@ -86,16 +88,40 @@ function KilledView({ kill }: { kill: KillRecord | null }) {
                 <CardDescription>Killed by {killerName}</CardDescription>
             </CardHeader>
             {kill && !kill.approved && !kill.contested && (
-                <CardContent className="flex justify-center gap-3">
-                    <Button onClick={() => router.post(KillController.approve().url)}>
-                        Approve Kill
-                    </Button>
-                    <Button
-                        variant="destructive"
-                        onClick={() => router.post(KillController.contest().url)}
-                    >
-                        Contest Kill
-                    </Button>
+                <CardContent className="flex flex-col gap-4">
+                    {showContestForm ? (
+                        <Form {...contest.form()} resetOnSuccess onSuccess={() => setShowContestForm(false)}>
+                            {({ errors, processing }) => (
+                                <div className="flex flex-col gap-3">
+                                    <Label htmlFor="contest_reason">Why are you contesting this kill?</Label>
+                                    <Textarea
+                                        id="contest_reason"
+                                        name="contest_reason"
+                                        rows={4}
+                                        placeholder="Describe why this kill is invalid..."
+                                    />
+                                    <InputError message={errors.contest_reason} />
+                                    <div className="flex gap-2">
+                                        <Button type="submit" variant="destructive" disabled={processing}>
+                                            Submit Contest
+                                        </Button>
+                                        <Button type="button" variant="outline" onClick={() => setShowContestForm(false)}>
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </Form>
+                    ) : (
+                        <div className="flex justify-center gap-3">
+                            <Button onClick={() => router.post(approve().url)}>
+                                Approve Kill
+                            </Button>
+                            <Button variant="destructive" onClick={() => setShowContestForm(true)}>
+                                Contest Kill
+                            </Button>
+                        </div>
+                    )}
                 </CardContent>
             )}
             {kill?.approved && (
@@ -150,7 +176,7 @@ function TargetView({ target }: { target: Target | null }) {
     // TODO: Use form or useForms here in the future
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        router.post(KillController.store().url, { verification_name: verificationName }, {
+        router.post(killStore().url, { verification_name: verificationName }, {
             onSuccess: () => {
                 setVerificationName('');
                 setShowCelebration(true);

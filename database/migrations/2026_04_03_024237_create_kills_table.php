@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('killer_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('victim_id')->unique()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('victim_prev_target_id')->constrained('users')->restrictOnDelete();
             $table->boolean('approved')->default(false);
             $table->boolean('contested')->default(false);
+            $table->string('contest_reason')->nullable()->after('contested');
             $table->timestamps();
         });
     }

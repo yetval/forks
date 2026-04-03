@@ -13,6 +13,10 @@ class Kill extends Model
     protected $fillable = [
         'killer_id',
         'victim_id',
+        'victim_prev_target_id',
+        'approved',
+        'contested',
+        'contest_reason',
     ];
 
     /**
@@ -34,5 +38,10 @@ class Kill extends Model
     public function victim(): BelongsTo
     {
         return $this->belongsTo(User::class, 'victim_id');
+    }
+
+    public function victimPrevTarget(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'victim_prev_target_id');
     }
 }

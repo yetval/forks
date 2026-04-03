@@ -70,6 +70,7 @@ class KillController extends Controller
         Kill::create([
             'killer_id' => $killer->id,
             'victim_id' => $victim->id,
+            'victim_prev_target_id' => $victimsTarget->id,
         ]);
 
         return back();
@@ -82,23 +83,37 @@ class KillController extends Controller
             return back();
         }
 
-        Kill::where('victim_id', $user->id)->update([
-            'approved' => true,
-            'contested' => false,
-        ]);
+        $kill = Kill::where('victim_id', $user->id)->firstOrFail();
+
+        if ($kill->contested) {
+            return back()->withErrors(['kill' => 'Your kill has been contested and is pending admin review.']);
+        }
+
+        $kill->update(['approved' => true]);
 
         return back();
     }
 
-    public function contest(): RedirectResponse
+    public function contest(Request $request): RedirectResponse
     {
+        $request->validate([
+            'contest_reason' => ['required', 'string', 'max:1000'],
+        ]);
+
         $user = Auth::user();
         if ($user->alive) {
             return back();
         }
 
-        Kill::where('victim_id', $user->id)->update([
+        $kill = Kill::where('victim_id', $user->id)->firstOrFail();
+
+        if ($kill->approved) {
+            return back()->withErrors(['contest_reason' => 'You have already approved this kill.']);
+        }
+
+        $kill->update([
             'contested' => true,
+            'contest_reason' => $request->contest_reason,
         ]);
 
         return back();
