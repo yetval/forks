@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\GameController;
+use App\Http\Controllers\Admin\TargetController;
 use App\Http\Controllers\Admin\UserController;
 use App\Models\Game;
 use App\Models\User;
@@ -21,6 +22,8 @@ Route::prefix('admin')->middleware(['auth', 'profile.completed', 'admin'])->grou
     Route::get('/players', [UserController::class, 'index'])->name('players');
     Route::get('/game', [GameController::class, 'index'])->name('game');
     Route::post('/game', [GameController::class, 'update'])->name('game.update');
+    Route::post('/target-rules', [TargetController::class, 'store'])->name('target-rules.store');
+    Route::delete('/target-rules/{targetRule}', [TargetController::class, 'destroy'])->name('target-rules.destroy');
 });
 
 Route::get('/login', function () {

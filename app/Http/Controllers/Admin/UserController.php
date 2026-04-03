@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\TargetRule;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,8 +17,13 @@ class UserController extends Controller
             ->orderBy('name')
             ->get();
 
+        $targetRules = TargetRule::query()
+            ->with(['player1:id,name', 'player2:id,name'])
+            ->get();
+
         return Inertia::render('admin/players', [
             'players' => $players,
+            'targetRules' => $targetRules,
         ]);
     }
 }
