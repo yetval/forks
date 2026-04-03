@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
-import { dashboard } from '@/routes';
+import { targets } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 
 type Target = {
@@ -26,7 +26,7 @@ type KillRecord = {
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Targets', href: dashboard().url },
+    { title: 'Targets', href: targets().url },
 ];
 
 export default function Targets({ target, kill }: { target: Target | null; kill: KillRecord | null }) {

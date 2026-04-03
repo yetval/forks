@@ -52,7 +52,7 @@ export default function Hero() {
                 <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
                     <ScrollControls pages={9} damping={0.1}>
                         <MainScene />
-                        <Scroll className={'w-screen'} html>
+                        <Scroll html style={{ width: '100vw' }}>
                             <HeroTitle />
 
                             <div className="absolute top-[150vh] flex h-screen w-full items-center justify-center px-8">

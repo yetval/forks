@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Gamepad2, Target, Users } from 'lucide-react';
+import { Gamepad2, LayoutGrid, Target, Users } from 'lucide-react';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -11,14 +11,19 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, game, players } from '@/routes';
+import { dashboard, game, players, targets } from '@/routes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Targets',
+        title: 'Dashboard',
         href: dashboard(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Targets',
+        href: targets(),
         icon: Target,
     },
 ];

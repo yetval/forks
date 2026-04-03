@@ -1,3 +1,4 @@
+import type { RequestPayload } from '@inertiajs/core';
 import { Head, router, usePage } from '@inertiajs/react';
 import GameController from '@/actions/App/Http/Controllers/Admin/GameController';
 import {
@@ -12,7 +13,7 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Toggle } from '@/components/ui/toggle';
 import AppLayout from '@/layouts/app-layout';
@@ -91,7 +92,7 @@ export default function Game({ stats }: { stats: GameStats }) {
     const currentStage = STAGES[currentIndex];
     const nextStage = STAGES[(currentIndex + 1) % STAGES.length];
 
-    function postUpdate(data: Record<string, unknown>) {
+    function postUpdate(data: RequestPayload) {
         router.post(GameController.update().url, data, {
             preserveScroll: true,
         });

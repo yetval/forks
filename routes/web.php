@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\TargetController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KillController;
 use App\Models\Game;
 use App\Models\User;
@@ -16,7 +17,8 @@ Route::get('/', function () {
 })->name('hero');
 
 Route::middleware(['auth', 'profile.completed'])->group(function () {
-    Route::get('dashboard', [KillController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('targets', [KillController::class, 'index'])->name('targets');
     Route::post('/kill', [KillController::class, 'store'])->name('kill.store');
     Route::post('/kill/approve', [KillController::class, 'approve'])->name('kill.approve');
     Route::post('/kill/contest', [KillController::class, 'contest'])->name('kill.contest');
@@ -87,7 +89,7 @@ Route::get('/auth/google/callback', function () {
 
     Auth::login($user);
 
-    return redirect('/dashboard');
+    return to_route('dashboard');
 })->name('auth.google.callback');
 
 require __DIR__.'/settings.php';
