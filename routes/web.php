@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\TargetController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\KillController;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,12 @@ Route::get('/', function () {
     return Inertia::render('hero');
 })->name('hero');
 
-Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
-})->middleware(['auth', 'profile.completed'])->name('dashboard');
+Route::middleware(['auth', 'profile.completed'])->group(function () {
+    Route::get('dashboard', [KillController::class, 'index'])->name('dashboard');
+    Route::post('/kill', [KillController::class, 'store'])->name('kill.store');
+    Route::post('/kill/approve', [KillController::class, 'approve'])->name('kill.approve');
+    Route::post('/kill/contest', [KillController::class, 'contest'])->name('kill.contest');
+});
 
 Route::prefix('admin')->middleware(['auth', 'profile.completed', 'admin'])->group(function () {
     Route::get('/players', [UserController::class, 'index'])->name('players');
@@ -24,6 +28,8 @@ Route::prefix('admin')->middleware(['auth', 'profile.completed', 'admin'])->grou
     Route::post('/game', [GameController::class, 'update'])->name('game.update');
     Route::post('/target-rules', [TargetController::class, 'store'])->name('target-rules.store');
     Route::delete('/target-rules/{targetRule}', [TargetController::class, 'destroy'])->name('target-rules.destroy');
+    Route::post('/targets/assign', [TargetController::class, 'assignTargets'])->name('targets.assign');
+    Route::post('/targets/clear', [TargetController::class, 'clearTargets'])->name('targets.clear');
 });
 
 Route::get('/login', function () {

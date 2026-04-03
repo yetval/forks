@@ -9,6 +9,10 @@ export type User = {
     dorm_location?: string | null;
     grade_year?: string | null;
     profile_completed?: boolean;
+    alive?: boolean;
+    is_admin?: boolean;
+    current_target_id?: number | null;
+    total_kills?: number;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

@@ -1,17 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import TargetController from '@/actions/App/Http/Controllers/Admin/TargetController';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,7 +46,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Players({ players, targetRules }: { players: Player[]; targetRules: TargetRule[] }) {
     const [player1, setPlayer1] = useState<string | null>(null);
     const [player2, setPlayer2] = useState<string | null>(null);
-    const playerNames = players.map((p) => p.name);
+    const playerNames = players.filter((p) => !p.is_admin).map((p) => p.name);
 
     function handleAddRule() {
         const p1 = players.find((p) => p.name === player1);
@@ -80,11 +69,13 @@ export default function Players({ players, targetRules }: { players: Player[]; t
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Players" />
             <div className="flex flex-col gap-6 p-4">
-                {/* Target management buttons (stubbed) */}
                 <div className="flex gap-3">
-                    <Button>Create Targets</Button>
-                    <Button variant="secondary">Reshuffle Targets</Button>
-                    <Button variant="destructive">Clear Targets</Button>
+                    <Button onClick={() => router.post(TargetController.assignTargets().url)}>
+                        Create Targets
+                    </Button>
+                    <Button variant="destructive" onClick={() => router.post(TargetController.clearTargets().url)}>
+                        Clear Targets
+                    </Button>
                 </div>
 
                 <Card>
