@@ -3,11 +3,10 @@ import {
     Environment,
     Sparkles,
     useScroll,
-    MeshReflectorMaterial,
 } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef, useState } from 'react';
-import { Group, RectAreaLight } from 'three';
+import { useRef, useState } from 'react';
+import type { Group, RectAreaLight } from 'three';
 import { MathUtils } from 'three';
 import Door from '@/models/door';
 import Fork from '@/models/fork';

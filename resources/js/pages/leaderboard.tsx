@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
+import HeroHeader from '@/components/hero-header';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import HeroHeader from '@/components/hero-header';
 
 type Player = {
     id: number;

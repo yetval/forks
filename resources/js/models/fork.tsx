@@ -1,7 +1,7 @@
 import { useGLTF } from '@react-three/drei';
+import type { ThreeElements } from '@react-three/fiber';
 import type * as THREE from 'three'
 import type { GLTF } from 'three-stdlib'
-import type { ThreeElements } from '@react-three/fiber';
 
 type GLTFResult = GLTF & {
     nodes: {
