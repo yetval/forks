@@ -32,4 +32,15 @@ class GameController extends Controller
 
         return to_route('game');
     }
+
+    public function enableFfa(): RedirectResponse
+    {
+        $game = Game::current();
+
+        if (! $game->ffa) {
+            $game->update(['ffa' => true]);
+        }
+
+        return back();
+    }
 }

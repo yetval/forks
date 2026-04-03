@@ -39,12 +39,18 @@ class KillController extends Controller
 
         $victim->alive = true;
         $victim->killed_by = null;
-        $victim->current_target_id = $kill->victim_prev_target_id;
-        $victim->save();
 
-        $killer->current_target_id = $victim->id;
-        $killer->total_kills -= 1;
-        $killer->save();
+        if ($kill->is_ffa) {
+            $victim->save();
+            $killer->total_kills = max(0, $killer->total_kills - 1);
+            $killer->save();
+        } else {
+            $victim->current_target_id = $kill->victim_prev_target_id;
+            $victim->save();
+            $killer->current_target_id = $victim->id;
+            $killer->total_kills = max(0, $killer->total_kills - 1);
+            $killer->save();
+        }
 
         $kill->delete();
 

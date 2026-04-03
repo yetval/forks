@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('stage')->default('pregame');
             $table->boolean('auth_open')->default(false);
+            $table->boolean('ffa')->default(false);
+            $table->boolean('show_real_names')->default(false);
             $table->timestamps();
         });
     }

@@ -32,6 +32,7 @@ type KillRecord = {
     victim: { id: number; name: string };
     approved: boolean;
     contested: boolean;
+    is_ffa: boolean;
     contest_reason: string | null;
 };
 
@@ -77,15 +78,20 @@ export default function Kills({ kills }: { kills: KillRecord[] }) {
                                                 <TableCell>{kill.killer.name}</TableCell>
                                                 <TableCell>{kill.victim.name}</TableCell>
                                                 <TableCell>
-                                                    {kill.approved && (
-                                                        <Badge variant="default">Approved</Badge>
-                                                    )}
-                                                    {kill.contested && (
-                                                        <Badge variant="destructive">Contested</Badge>
-                                                    )}
-                                                    {!kill.approved && !kill.contested && (
-                                                        <Badge variant="outline">Pending</Badge>
-                                                    )}
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {kill.is_ffa && (
+                                                            <Badge variant="secondary">FFA</Badge>
+                                                        )}
+                                                        {kill.approved && (
+                                                            <Badge variant="default">Approved</Badge>
+                                                        )}
+                                                        {kill.contested && (
+                                                            <Badge variant="destructive">Contested</Badge>
+                                                        )}
+                                                        {!kill.approved && !kill.contested && (
+                                                            <Badge variant="outline">Pending</Badge>
+                                                        )}
+                                                    </div>
                                                 </TableCell>
                                                 <TableCell className="text-muted-foreground text-sm">
                                                     {kill.contest_reason ?? '—'}

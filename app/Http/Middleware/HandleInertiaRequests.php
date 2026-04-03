@@ -42,10 +42,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'game' => [
+            'game' => fn () => [
                 'stage' => Game::current()->stage->value,
                 'stage_label' => Game::current()->stage->label(),
                 'auth_open' => Game::current()->authIsOpen(),
+                'ffa' => Game::current()->ffa,
+                'show_real_names' => Game::current()->show_real_names,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];

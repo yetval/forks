@@ -1,6 +1,6 @@
 import type { RequestPayload } from '@inertiajs/core';
 import { Head, router, usePage } from '@inertiajs/react';
-import GameController from '@/actions/App/Http/Controllers/Admin/GameController';
+import { enableFfa, update } from '@/actions/App/Http/Controllers/Admin/GameController';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -93,7 +93,7 @@ export default function Game({ stats }: { stats: GameStats }) {
     const nextStage = STAGES[(currentIndex + 1) % STAGES.length];
 
     function postUpdate(data: RequestPayload) {
-        router.post(GameController.update().url, data, {
+        router.post(update().url, data, {
             preserveScroll: true,
         });
     }
@@ -164,6 +164,49 @@ export default function Game({ stats }: { stats: GameStats }) {
                         </ConfirmButton>
                     </div>
                 </div>
+
+                <Separator />
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Free For All</CardTitle>
+                        <CardDescription>Enable FFA mode — any player can eliminate any other player. This cannot be undone.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {game.ffa ? (
+                            <Button disabled variant="secondary">FFA Active</Button>
+                        ) : (
+                            <ConfirmButton
+                                title="Enable Free For All"
+                                description="This will switch the game to FFA mode. The target chain will be replaced — any alive player can eliminate any other. This cannot be undone."
+                                onConfirm={() => router.post(enableFfa().url)}
+                            >
+                                Enable FFA
+                            </ConfirmButton>
+                        )}
+                    </CardContent>
+                </Card>
+
+                <Separator />
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Real Names</CardTitle>
+                        <CardDescription>Show real names alongside nicknames on the public leaderboard</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm">{game.show_real_names ? 'Shown' : 'Hidden'}</span>
+                            <Toggle
+                                pressed={game.show_real_names}
+                                onPressedChange={(pressed) => postUpdate({ show_real_names: pressed })}
+                                aria-label="Toggle real names"
+                            >
+                                {game.show_real_names ? 'On' : 'Off'}
+                            </Toggle>
+                        </div>
+                    </CardContent>
+                </Card>
 
                 <Separator />
 

@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Utensils } from 'lucide-react';
+import { leaderboard } from '@/routes';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,6 +21,9 @@ export default function HeroHeader() {
                 <Utensils className="size-5" />
             </Link>
             <div className="flex items-center gap-3">
+                <Button variant="link" size="sm" asChild>
+                    <Link href={leaderboard().url}>Leaderboard</Link>
+                </Button>
                 <Button variant="link" size="sm" asChild>
                     <a href="/forks-game-rules.pdf" target="_blank">
                         Rules

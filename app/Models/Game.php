@@ -13,6 +13,8 @@ class Game extends Model
     protected $fillable = [
         'stage',
         'auth_open',
+        'ffa',
+        'show_real_names',
     ];
 
     /**
@@ -23,6 +25,8 @@ class Game extends Model
         return [
             'stage' => GameStage::class,
             'auth_open' => 'boolean',
+            'ffa' => 'boolean',
+            'show_real_names' => 'boolean',
         ];
     }
 

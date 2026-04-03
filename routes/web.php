@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\TargetController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KillController;
+use App\Http\Controllers\LeaderboardController;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,8 @@ use Laravel\Socialite\Facades\Socialite;
 Route::get('/', function () {
     return Inertia::render('hero');
 })->name('hero');
+
+Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
 
 Route::middleware(['auth', 'profile.completed'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -29,6 +32,7 @@ Route::prefix('admin')->middleware(['auth', 'profile.completed', 'admin'])->grou
     Route::get('/players', [UserController::class, 'index'])->name('players');
     Route::get('/game', [GameController::class, 'index'])->name('game');
     Route::post('/game', [GameController::class, 'update'])->name('game.update');
+    Route::post('/game/ffa', [GameController::class, 'enableFfa'])->name('game.ffa');
     Route::post('/target-rules', [TargetController::class, 'store'])->name('target-rules.store');
     Route::delete('/target-rules/{targetRule}', [TargetController::class, 'destroy'])->name('target-rules.destroy');
     Route::post('/targets/assign', [TargetController::class, 'assignTargets'])->name('targets.assign');

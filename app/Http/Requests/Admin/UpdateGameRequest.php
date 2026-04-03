@@ -16,6 +16,7 @@ class UpdateGameRequest extends FormRequest
         return [
             'stage' => ['sometimes', 'required', Rule::enum(GameStage::class)],
             'auth_open' => ['sometimes', 'required', 'boolean'],
+            'show_real_names' => ['sometimes', 'required', 'boolean'],
         ];
     }
 }

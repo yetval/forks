@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
@@ -23,14 +24,29 @@ type KillRecord = {
     id: number;
     approved: boolean;
     contested: boolean;
+    is_ffa: boolean;
     killer: { id: number; name: string; nickname: string | null };
+};
+
+type AlivePlayer = {
+    id: number;
+    name: string;
+    nickname: string | null;
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Targets', href: targets().url },
 ];
 
-export default function Targets({ target, kill }: { target: Target | null; kill: KillRecord | null }) {
+export default function Targets({
+    target,
+    kill,
+    alive_players,
+}: {
+    target: Target | null;
+    kill: KillRecord | null;
+    alive_players: AlivePlayer[];
+}) {
     const { game, auth } = usePage().props;
     const user = auth.user;
 
@@ -46,7 +62,7 @@ export default function Targets({ target, kill }: { target: Target | null; kill:
                             </CardTitle>
                             <CardDescription>
                                 {game.stage === 'pregame'
-                                    ? 'The game hasn\'t started yet. Hang tight.'
+                                    ? "The game hasn't started yet. Hang tight."
                                     : 'The game is over. Check the results.'}
                             </CardDescription>
                         </CardHeader>
@@ -71,7 +87,11 @@ export default function Targets({ target, kill }: { target: Target | null; kill:
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Targets" />
             <div className="flex flex-1 items-center justify-center p-4">
-                <TargetView target={target} />
+                {game.ffa ? (
+                    <FfaTargetView alivePlayers={alive_players} />
+                ) : (
+                    <TargetView target={target} />
+                )}
             </div>
         </AppLayout>
     );
@@ -135,6 +155,82 @@ function KilledView({ kill }: { kill: KillRecord | null }) {
                 </CardContent>
             )}
         </Card>
+    );
+}
+
+function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
+    const [victimId, setVictimId] = useState<string>('');
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
+    const { errors } = usePage().props;
+
+    useEffect(() => {
+        const updateViewportSize = () => {
+            setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+        updateViewportSize();
+        window.addEventListener('resize', updateViewportSize);
+        return () => window.removeEventListener('resize', updateViewportSize);
+    }, []);
+
+    useEffect(() => {
+        if (!showCelebration) return;
+        const timeoutId = window.setTimeout(() => setShowCelebration(false), 10000);
+        return () => window.clearTimeout(timeoutId);
+    }, [showCelebration]);
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        router.post(killStore().url, { victim_id: victimId }, {
+            onSuccess: () => {
+                setVictimId('');
+                setShowCelebration(true);
+            },
+        });
+    }
+
+    return (
+        <>
+            {showCelebration && viewportSize.width > 0 && viewportSize.height > 0 && (
+                <Confetti width={viewportSize.width} height={viewportSize.height} />
+            )}
+            <Card className="w-full max-w-md">
+                <CardHeader className="text-center">
+                    <CardDescription>Free For All</CardDescription>
+                    <CardTitle className="text-2xl">Select Your Target</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {showCelebration && (
+                        <div className="mb-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center">
+                            <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200">
+                                Target eliminated.
+                            </p>
+                        </div>
+                    )}
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="victim_id">Choose a player to eliminate</Label>
+                            <Select value={victimId} onValueChange={setVictimId}>
+                                <SelectTrigger id="victim_id">
+                                    <SelectValue placeholder="Select a player..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {alivePlayers.map((player) => (
+                                        <SelectItem key={player.id} value={String(player.id)}>
+                                            {player.nickname ?? player.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <InputError message={(errors as Record<string, string>).victim_id} />
+                        </div>
+                        <Button type="submit" disabled={!victimId}>
+                            Submit Kill
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+        </>
     );
 }
 

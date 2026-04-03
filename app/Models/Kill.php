@@ -17,6 +17,7 @@ class Kill extends Model
         'approved',
         'contested',
         'contest_reason',
+        'is_ffa',
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kill extends Model
         return [
             'approved' => 'boolean',
             'contested' => 'boolean',
+            'is_ffa' => 'boolean',
         ];
     }
 

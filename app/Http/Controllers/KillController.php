@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\GameStage;
 use App\Models\Game;
 use App\Models\Kill;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,33 +17,83 @@ class KillController extends Controller
     public function index(): Response
     {
         $user = Auth::user()->load(['currentTarget:id,name,nickname', 'killedByUser:id,name,nickname']);
+        $game = Game::current();
 
         $kill = null;
         if (! $user->alive) {
             $kill = Kill::with('killer:id,name,nickname')->where('victim_id', $user->id)->first();
         }
 
+        $alivePlayers = $game->ffa
+            ? User::query()->where('alive', true)->where('id', '!=', $user->id)->get(['id', 'name', 'nickname'])
+            : [];
+
         return Inertia::render('targets', [
             'target' => $user->currentTarget,
             'kill' => $kill,
+            'alive_players' => $alivePlayers,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'verification_name' => ['required', 'string'],
-        ]);
-
         $game = Game::current();
+
         if ($game->stage !== GameStage::Running) {
-            return back()->withErrors(['verification_name' => 'The game is not running.']);
+            return back()->withErrors(['victim_id' => 'The game is not running.', 'verification_name' => 'The game is not running.']);
         }
 
         $killer = Auth::user();
         if (! $killer->alive) {
-            return back()->withErrors(['verification_name' => 'You are already eliminated.']);
+            return back()->withErrors(['victim_id' => 'You are already eliminated.', 'verification_name' => 'You are already eliminated.']);
         }
+
+        if ($game->ffa) {
+            return $this->storeFfaKill($request, $killer);
+        }
+
+        return $this->storeNormalKill($request, $killer);
+    }
+
+    private function storeFfaKill(Request $request, User $killer): RedirectResponse
+    {
+        $request->validate([
+            'victim_id' => ['required', 'integer', 'exists:users,id'],
+        ]);
+
+        if ((int) $request->victim_id === $killer->id) {
+            return back()->withErrors(['victim_id' => 'You cannot eliminate yourself.']);
+        }
+
+        $victim = User::find($request->victim_id);
+
+        if (! $victim->alive) {
+            return back()->withErrors(['victim_id' => 'That player is already eliminated.']);
+        }
+
+        $killer->total_kills += 1;
+        $killer->save();
+
+        $victim->alive = false;
+        $victim->killed_by = $killer->id;
+        $victim->current_target_id = null;
+        $victim->save();
+
+        Kill::create([
+            'killer_id' => $killer->id,
+            'victim_id' => $victim->id,
+            'victim_prev_target_id' => null,
+            'is_ffa' => true,
+        ]);
+
+        return back();
+    }
+
+    private function storeNormalKill(Request $request, User $killer): RedirectResponse
+    {
+        $request->validate([
+            'verification_name' => ['required', 'string'],
+        ]);
 
         $victim = $killer->currentTarget;
         if (! $victim) {
