@@ -16,6 +16,8 @@ class KillController extends Controller
 {
     public function index(): Response
     {
+        abort_if(Auth::user()->is_admin, 403);
+
         $user = Auth::user()->load(['currentTarget:id,name,nickname', 'killedByUser:id,name,nickname']);
         $game = Game::current();
 
@@ -37,6 +39,8 @@ class KillController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        abort_if(Auth::user()->is_admin, 403);
+
         $game = Game::current();
 
         if ($game->stage !== GameStage::Running) {

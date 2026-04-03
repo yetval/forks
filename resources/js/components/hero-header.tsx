@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Utensils } from 'lucide-react';
-import { leaderboard } from '@/routes';
+import { dashboard, leaderboard } from '@/routes';
+import AppLogo from '@/components/app-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,8 +17,8 @@ export default function HeroHeader() {
 
     return (
         <header className="fixed top-0 z-50 flex w-full items-center justify-between px-6 py-4">
-            <Link href="/" className="text-white">
-                <Utensils className="size-5" />
+            <Link href="/" className="flex items-center gap-2 text-white">
+                <AppLogo />
             </Link>
             <div className="flex items-center gap-3">
                 <Button variant="link" size="sm" asChild>
@@ -29,6 +29,11 @@ export default function HeroHeader() {
                         Rules
                     </a>
                 </Button>
+                {auth.user && (
+                    <Button variant="link" size="sm" asChild>
+                        <Link href={dashboard().url}>Dashboard</Link>
+                    </Button>
+                )}
                 {auth.user ? (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
