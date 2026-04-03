@@ -24,15 +24,23 @@ export default function MainScene() {
         const r1 = scroll.range(0, 2 / 9);
         const r2 = scroll.range(2 / 9, 1 / 9);
 
-        // Camera zoom-out: start close (z=5), pull back to (z=10)
         const cameraProgress = scroll.range(0, 3 / 9);
         const targetCamZ = 5 + 5 * cameraProgress;
+        const targetCamY = -2 + 2 * cameraProgress;
         state.camera.position.z = MathUtils.damp(
             state.camera.position.z,
             targetCamZ,
             DAMP,
             delta,
         );
+
+        state.camera.position.y = MathUtils.damp(
+            state.camera.position.y,
+            targetCamY,
+            DAMP,
+            delta,
+        );
+
         const r3 = scroll.range(4 / 9, 1 / 9);
         const r4 = scroll.range(5 / 9, 1 / 9);
         const r5 = scroll.range(8 / 9, 1 / 9);
