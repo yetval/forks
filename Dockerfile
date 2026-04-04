@@ -1,7 +1,7 @@
 FROM php:8.4-cli AS builder
 
-RUN apt-get update && apt-get install -y curl unzip libonig-dev libxml2-dev libsqlite3-dev \
-    && docker-php-ext-install mbstring tokenizer xml dom pdo pdo_sqlite \
+RUN apt-get update && apt-get install -y curl unzip libonig-dev libsqlite3-dev \
+    && docker-php-ext-install mbstring pdo_sqlite \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
