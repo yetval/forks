@@ -1,4 +1,4 @@
-import { Form, Head, router, usePage } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
 import { approve, contest, store as killStore } from '@/actions/App/Http/Controllers/KillController';
@@ -134,9 +134,11 @@ function KilledView({ kill }: { kill: KillRecord | null }) {
                         </Form>
                     ) : (
                         <div className="flex justify-center gap-3">
-                            <Button onClick={() => router.post(approve().url)}>
-                                Approve Kill
-                            </Button>
+                            <Form {...approve.form()}>
+                                <Button type="submit">
+                                    Approve Kill
+                                </Button>
+                            </Form>
                             <Button variant="destructive" onClick={() => setShowContestForm(true)}>
                                 Contest Kill
                             </Button>
@@ -162,7 +164,6 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
     const [victimId, setVictimId] = useState<string>('');
     const [showCelebration, setShowCelebration] = useState(false);
     const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
-    const { errors } = usePage().props;
 
     useEffect(() => {
         const updateViewportSize = () => {
@@ -178,16 +179,6 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
         const timeoutId = window.setTimeout(() => setShowCelebration(false), 10000);
         return () => window.clearTimeout(timeoutId);
     }, [showCelebration]);
-
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        router.post(killStore().url, { victim_id: victimId }, {
-            onSuccess: () => {
-                setVictimId('');
-                setShowCelebration(true);
-            },
-        });
-    }
 
     return (
         <>
@@ -207,27 +198,39 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
                             </p>
                         </div>
                     )}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="victim_id">Choose a player to eliminate</Label>
-                            <Select value={victimId} onValueChange={setVictimId}>
-                                <SelectTrigger id="victim_id">
-                                    <SelectValue placeholder="Select a player..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {alivePlayers.map((player) => (
-                                        <SelectItem key={player.id} value={String(player.id)}>
-                                            {player.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <InputError message={(errors as Record<string, string>).victim_id} />
-                        </div>
-                        <Button type="submit" disabled={!victimId}>
-                            Submit Kill
-                        </Button>
-                    </form>
+                    <Form
+                        {...killStore.form()}
+                        resetOnSuccess
+                        onSuccess={() => {
+                            setVictimId('');
+                            setShowCelebration(true);
+                        }}
+                        className="flex flex-col gap-4"
+                    >
+                        {({ errors, processing }) => (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="victim_id">Choose a player to eliminate</Label>
+                                    <Select name="victim_id" value={victimId} onValueChange={setVictimId}>
+                                        <SelectTrigger id="victim_id">
+                                            <SelectValue placeholder="Select a player..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {alivePlayers.map((player) => (
+                                                <SelectItem key={player.id} value={String(player.id)}>
+                                                    {player.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError message={errors.victim_id} />
+                                </div>
+                                <Button type="submit" disabled={!victimId || processing}>
+                                    Submit Kill
+                                </Button>
+                            </>
+                        )}
+                    </Form>
                 </CardContent>
             </Card>
         </>
@@ -239,9 +242,7 @@ function TargetView({ target }: { target: Target | null }) {
     const [isVisible, setIsVisible] = useState(false);
     const [showCelebration, setShowCelebration] = useState(false);
     const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
-    const { errors } = usePage().props;
     const targetName = target?.name ?? 'No target assigned';
-    const hasVerificationError = Boolean((errors as Record<string, string>).verification_name);
 
     useEffect(() => {
         const updateViewportSize = () => {
@@ -268,17 +269,6 @@ function TargetView({ target }: { target: Target | null }) {
 
         return () => window.clearTimeout(timeoutId);
     }, [showCelebration]);
-
-    // TODO: Use form or useForms here in the future
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        router.post(killStore().url, { verification_name: verificationName }, {
-            onSuccess: () => {
-                setVerificationName('');
-                setShowCelebration(true);
-            },
-        });
-    }
 
     return (
         <>
@@ -308,23 +298,36 @@ function TargetView({ target }: { target: Target | null }) {
                                 </p>
                             </div>
                         )}
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="verification_name">
-                                    Your target&apos;s next target&apos;s full name
-                                </Label>
-                                <Input
-                                    id="verification_name"
-                                    value={verificationName}
-                                    onChange={(e) => setVerificationName(e.target.value)}
-                                    placeholder="Enter full name to verify"
-                                />
-                                <InputError message={(errors as Record<string, string>).verification_name} />
-                            </div>
-                            <Button type="submit" disabled={!verificationName.trim()}>
-                                {showCelebration && !hasVerificationError ? 'Confirmed' : 'Submit Kill'}
-                            </Button>
-                        </form>
+                        <Form
+                            {...killStore.form()}
+                            resetOnSuccess
+                            onSuccess={() => {
+                                setVerificationName('');
+                                setShowCelebration(true);
+                            }}
+                            className="flex flex-col gap-4"
+                        >
+                            {({ errors, processing, hasErrors }) => (
+                                <>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="verification_name">
+                                            Your target&apos;s next target&apos;s full name
+                                        </Label>
+                                        <Input
+                                            id="verification_name"
+                                            name="verification_name"
+                                            value={verificationName}
+                                            onChange={(e) => setVerificationName(e.target.value)}
+                                            placeholder="Enter full name to verify"
+                                        />
+                                        <InputError message={errors.verification_name} />
+                                    </div>
+                                    <Button type="submit" disabled={!verificationName.trim() || processing}>
+                                        {showCelebration && !hasErrors ? 'Confirmed' : 'Submit Kill'}
+                                    </Button>
+                                </>
+                            )}
+                        </Form>
                     </CardContent>
                 )}
             </Card>

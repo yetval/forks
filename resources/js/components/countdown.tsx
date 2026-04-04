@@ -21,11 +21,8 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
                 <p className="text-sm font-extralight uppercase tracking-widest text-zinc-400">
                     The game is
                 </p>
-                <p className="mt-2 text-8xl font-bold tracking-tight text-white">
+                <p className="mt-2 text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-white">
                     LIVE
-                </p>
-                <p className="mt-3 text-lg font-extralight text-zinc-400">
-                    Forks are out. Watch your back.
                 </p>
             </div>
         );
@@ -34,7 +31,7 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
     return (
         <div className="text-center">
             <p className="text-xl font-extralight uppercase tracking-widest text-zinc-300">{label}</p>
-            <div className="mt-6 flex items-center justify-center gap-6">
+            <div className="mt-6 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
                 <TimeUnit value={timeLeft.days} label="Days" />
                 <Separator />
                 <TimeUnit value={timeLeft.hours} label="Hours" />
@@ -51,7 +48,7 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
     return (
         <div className="flex flex-col items-center">
             <span
-                className="text-7xl font-bold tabular-nums text-white"
+                className="text-4xl sm:text-5xl md:text-7xl font-bold tabular-nums text-white"
             >
                 {String(value).padStart(2, '0')}
             </span>
@@ -61,7 +58,7 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
 }
 
 function Separator() {
-    return <span className="text-5xl font-light text-zinc-600">:</span>;
+    return <span className="text-3xl sm:text-4xl md:text-5xl font-light text-zinc-600">:</span>;
 }
 
 function getTimeLeft(target: Date) {

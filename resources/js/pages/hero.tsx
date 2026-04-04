@@ -7,7 +7,7 @@ import HeroHeader from '@/components/hero-header';
 import { Button } from '@/components/ui/button';
 import MainScene from '@/scenes/main-scene';
 
-const GAME_START = new Date('2026-03-01T00:00:00');
+const GAME_START = new Date('2026-05-01T00:00:00');
 
 function HeroTitle() {
     const ref = useRef<HTMLDivElement>(null!);
@@ -26,7 +26,7 @@ function HeroTitle() {
             <p className="text-sm font-extralight uppercase tracking-[0.3em] text-zinc-400">
                 NCSSM Morganton
             </p>
-            <h1 className="mt-2 text-[10rem] leading-none font-bold tracking-tighter text-white uppercase">
+            <h1 className="mt-2 text-7xl sm:text-8xl md:text-[10rem] leading-none font-bold tracking-tighter text-white uppercase">
                 FORKS
             </h1>
         </div>
@@ -59,7 +59,7 @@ export default function Hero() {
                                 <p className="text-center text-xl font-extralight tracking-widest text-zinc-300 uppercase">
                                     One night, a fork will
                                     <br />
-                                    <span className="text-7xl font-bold tracking-tight text-white">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white">
                                         slide under your door.
                                     </span>
                                 </p>
@@ -69,7 +69,7 @@ export default function Hero() {
                                 <p className="text-center text-xl font-extralight tracking-widest text-zinc-300 uppercase">
                                     On it —
                                     <br />
-                                    <span className="text-7xl font-bold tracking-tight text-white">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white">
                                         someone else's name.
                                     </span>
                                 </p>
@@ -79,7 +79,7 @@ export default function Hero() {
                                 <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                                     Welcome to
                                 </p>
-                                <h1 className="text-[14rem] leading-none font-bold tracking-tighter text-white uppercase">
+                                <h1 className="text-8xl sm:text-9xl md:text-[14rem] leading-none font-bold tracking-tighter text-white uppercase">
                                     FORKS
                                 </h1>
                                 <p className="text-xs font-extralight tracking-widest text-zinc-500 uppercase">
@@ -88,12 +88,12 @@ export default function Hero() {
                             </div>
 
                             {/* Page 6: How it works */}
-                            <div className="absolute top-[500vh] flex h-screen w-1/2 items-center pl-16">
+                            <div className="absolute top-[500vh] flex h-screen w-full px-6 md:w-1/2 md:pl-16 md:px-0 items-center">
                                 <div>
                                     <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                                         The rules
                                     </p>
-                                    <h2 className="mt-2 text-5xl font-bold text-white">
+                                    <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-bold text-white">
                                         How it works
                                     </h2>
                                     <ul className="mt-6 space-y-3 text-lg leading-relaxed text-zinc-300">
@@ -119,12 +119,12 @@ export default function Hero() {
                             </div>
 
                             {/* Page 7: Immunity & Safe Zones */}
-                            <div className="absolute top-[600vh] flex h-screen w-1/2 items-center pl-16">
+                            <div className="absolute top-[600vh] flex h-screen w-full px-6 md:w-1/2 md:pl-16 md:px-0 items-center">
                                 <div>
                                     <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                                         The rules
                                     </p>
-                                    <h2 className="mt-2 text-5xl font-bold text-white">
+                                    <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-bold text-white">
                                         Immunity
                                     </h2>
                                     <ul className="mt-6 space-y-3 text-lg leading-relaxed text-zinc-300">
@@ -145,12 +145,12 @@ export default function Hero() {
                             </div>
 
                             {/* Page 8: Safe Zones */}
-                            <div className="absolute top-[700vh] flex h-screen w-1/2 items-center pl-16">
+                            <div className="absolute top-[700vh] flex h-screen w-full px-6 md:w-1/2 md:pl-16 md:px-0 items-center">
                                 <div>
                                     <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                                         The rules
                                     </p>
-                                    <h2 className="mt-2 text-5xl font-bold text-white">
+                                    <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-bold text-white">
                                         Safe zones
                                     </h2>
                                     <ul className="mt-6 space-y-3 text-lg leading-relaxed text-zinc-300">

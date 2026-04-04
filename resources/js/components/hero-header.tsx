@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
+import { Menu } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,13 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { dashboard, leaderboard } from '@/routes';
@@ -16,28 +24,31 @@ export default function HeroHeader() {
     const getInitials = useInitials();
 
     return (
-        <header className="fixed top-0 z-50 flex w-full items-center justify-between px-6 py-4">
+        <header className="fixed top-0 z-50 flex w-full items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
             <Link href="/" className="flex items-center gap-2 text-white">
                 <AppLogo />
             </Link>
             <div className="flex items-center gap-3">
-                <Button variant="link" size="sm" asChild>
-                    <Link href={leaderboard().url} className="text-white hover:text-white">
-                        Leaderboard
-                    </Link>
-                </Button>
-                <Button variant="link" size="sm" asChild>
-                    <a href="/forks-game-rules.pdf" target="_blank" className="text-white hover:text-white">
-                        Rules
-                    </a>
-                </Button>
-                {auth.user && (
+                <div className="hidden sm:flex items-center gap-3">
                     <Button variant="link" size="sm" asChild>
-                        <Link href={dashboard().url} className="text-white hover:text-white">
-                            Dashboard
+                        <Link href={leaderboard().url} className="text-white hover:text-white">
+                            Leaderboard
                         </Link>
                     </Button>
-                )}
+                    <Button variant="link" size="sm" asChild>
+                        <a href="/forks-game-rules.pdf" target="_blank" className="text-white hover:text-white">
+                            Rules
+                        </a>
+                    </Button>
+                    {auth.user && (
+                        <Button variant="link" size="sm" asChild>
+                            <Link href={dashboard().url} className="text-white hover:text-white">
+                                Dashboard
+                            </Link>
+                        </Button>
+                    )}
+                </div>
+
                 {auth.user ? (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -59,6 +70,33 @@ export default function HeroHeader() {
                         <Link href="/login">Log in</Link>
                     </Button>
                 ) : null}
+
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="ghost" size="icon" className="sm:hidden text-white">
+                            <Menu className="size-5" />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-64 bg-zinc-950 border-zinc-800">
+                        <SheetTitle className="sr-only">Navigation</SheetTitle>
+                        <SheetHeader className="text-left">
+                            <AppLogo />
+                        </SheetHeader>
+                        <nav className="mt-8 flex flex-col gap-4 px-4">
+                            <Link href={leaderboard().url} className="text-lg text-zinc-200">
+                                Leaderboard
+                            </Link>
+                            <a href="/forks-game-rules.pdf" target="_blank" className="text-lg text-zinc-200">
+                                Rules
+                            </a>
+                            {auth.user && (
+                                <Link href={dashboard().url} className="text-lg text-zinc-200">
+                                    Dashboard
+                                </Link>
+                            )}
+                        </nav>
+                    </SheetContent>
+                </Sheet>
             </div>
         </header>
     );

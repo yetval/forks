@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import { dismiss, revert } from '@/actions/App/Http/Controllers/Admin/KillController';
 import {
     AlertDialog,
@@ -41,14 +41,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Kills({ kills }: { kills: KillRecord[] }) {
-    function handleRevert(id: number) {
-        router.delete(revert(id).url);
-    }
-
-    function handleDismiss(id: number) {
-        router.post(dismiss(id).url);
-    }
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kills" />
@@ -114,9 +106,11 @@ export default function Kills({ kills }: { kills: KillRecord[] }) {
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
                                                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                        <AlertDialogAction onClick={() => handleDismiss(kill.id)}>
-                                                                            Dismiss
-                                                                        </AlertDialogAction>
+                                                                        <Form {...dismiss.form(kill.id)}>
+                                                                            <AlertDialogAction type="submit">
+                                                                                Dismiss
+                                                                            </AlertDialogAction>
+                                                                        </Form>
                                                                     </AlertDialogFooter>
                                                                 </AlertDialogContent>
                                                             </AlertDialog>
@@ -136,9 +130,11 @@ export default function Kills({ kills }: { kills: KillRecord[] }) {
                                                                 </AlertDialogHeader>
                                                                 <AlertDialogFooter>
                                                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                    <AlertDialogAction onClick={() => handleRevert(kill.id)}>
-                                                                        Revert
-                                                                    </AlertDialogAction>
+                                                                    <Form {...revert.form(kill.id)} method="delete">
+                                                                        <AlertDialogAction type="submit">
+                                                                            Revert
+                                                                        </AlertDialogAction>
+                                                                    </Form>
                                                                 </AlertDialogFooter>
                                                             </AlertDialogContent>
                                                         </AlertDialog>

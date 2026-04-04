@@ -12,6 +12,6 @@ class GameSeeder extends Seeder
      */
     public function run(): void
     {
-        Game::query()->firstOrCreate([], Game::defaultAttributes());
+        Game::query()->firstOrCreate([]);
     }
 }

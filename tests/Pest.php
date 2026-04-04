@@ -14,7 +14,7 @@
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->beforeEach(function () {
-        \App\Models\Game::create(\App\Models\Game::defaultAttributes());
+        \App\Models\Game::create();
     })
     ->in('Feature');
 

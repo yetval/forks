@@ -8,6 +8,7 @@ import { useFrame } from '@react-three/fiber';
 import { useRef, useState } from 'react';
 import type { Group, RectAreaLight } from 'three';
 import { MathUtils } from 'three';
+import { useIsMobile } from '@/hooks/use-mobile';
 import Door from '@/models/door';
 import Fork from '@/models/fork';
 import ScrambleText from '@/models/scramble-text';
@@ -18,6 +19,7 @@ export default function MainScene() {
     const forkRef = useRef<Group>(null!);
     const rectLightRef = useRef<RectAreaLight>(null!);
     const scroll = useScroll();
+    const isMobile = useIsMobile();
     const [doorOpacity, setDoorOpacity] = useState(1);
 
     useFrame((state, delta) => {
@@ -25,7 +27,8 @@ export default function MainScene() {
         const r2 = scroll.range(2 / 9, 1 / 9);
 
         const cameraProgress = scroll.range(0, 3 / 9);
-        const targetCamZ = 5 + 5 * cameraProgress;
+        const baseCamZ = isMobile ? 7 : 5;
+        const targetCamZ = baseCamZ + 5 * cameraProgress;
         const targetCamY = -2 + 2 * cameraProgress;
         state.camera.position.z = MathUtils.damp(
             state.camera.position.z,
@@ -68,7 +71,7 @@ export default function MainScene() {
 
         if (r3 > 0.01) {
             // Page 5+: spinning
-            const targetPosX = r5 > 0.01 ? -0.25 : r4 > 0.01 ? 0.075 : -0.25;
+            const targetPosX = r5 > 0.01 ? -0.25 : r4 > 0.01 ? (isMobile ? -0.25 : 0.075) : -0.25;
             forkRef.current.position.x = MathUtils.damp(
                 forkRef.current.position.x,
                 targetPosX,

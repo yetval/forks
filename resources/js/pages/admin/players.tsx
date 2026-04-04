@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import { useState } from 'react';
 import TargetController from '@/actions/App/Http/Controllers/Admin/TargetController';
 import { Badge } from '@/components/ui/badge';
@@ -48,34 +48,24 @@ export default function Players({ players, targetRules }: { players: Player[]; t
     const [player2, setPlayer2] = useState<string | null>(null);
     const playerNames = players.filter((p) => !p.is_admin).map((p) => p.name);
 
-    function handleAddRule() {
-        const p1 = players.find((p) => p.name === player1);
-        const p2 = players.find((p) => p.name === player2);
-        if (!p1 || !p2) return;
-
-        router.post(TargetController.store().url, { player_1: p1.id, player_2: p2.id }, {
-            onSuccess: () => {
-                setPlayer1(null);
-                setPlayer2(null);
-            },
-        });
-    }
-
-    function handleDeleteRule(id: number) {
-        router.delete(TargetController.destroy(id).url);
-    }
+    const p1 = players.find((p) => p.name === player1);
+    const p2 = players.find((p) => p.name === player2);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Players" />
             <div className="flex flex-col gap-6 p-4">
                 <div className="flex gap-3">
-                    <Button onClick={() => router.post(TargetController.assignTargets().url)}>
-                        Create Targets
-                    </Button>
-                    <Button variant="destructive" onClick={() => router.post(TargetController.clearTargets().url)}>
-                        Clear Targets
-                    </Button>
+                    <Form {...TargetController.assignTargets.form()}>
+                        <Button type="submit">
+                            Create Targets
+                        </Button>
+                    </Form>
+                    <Form {...TargetController.clearTargets.form()}>
+                        <Button type="submit" variant="destructive">
+                            Clear Targets
+                        </Button>
+                    </Form>
                 </div>
 
                 <Card>
@@ -99,7 +89,9 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                                 <TableCell>{rule.player1.name}</TableCell>
                                                 <TableCell>{rule.player2.name}</TableCell>
                                                 <TableCell>
-                                                    <Button variant="destructive" size="sm" onClick={() => handleDeleteRule(rule.id)}>Delete</Button>
+                                                    <Form {...TargetController.destroy.form(rule.id)} method="delete">
+                                                        <Button type="submit" variant="destructive" size="sm">Delete</Button>
+                                                    </Form>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -108,45 +100,56 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             </div>
                         )}
 
-                        <div className="flex gap-3">
-                            <Combobox
-                                value={player1}
-                                onValueChange={setPlayer1}
-                                items={playerNames}
-                            >
-                                <ComboboxInput placeholder="Player 1" className="w-48" />
-                                <ComboboxContent>
-                                    <ComboboxEmpty>No players found.</ComboboxEmpty>
-                                    <ComboboxList>
-                                        {(item) => (
-                                            <ComboboxItem key={item} value={item}>
-                                                {item}
-                                            </ComboboxItem>
-                                        )}
-                                    </ComboboxList>
-                                </ComboboxContent>
-                            </Combobox>
-                            <Combobox
-                                value={player2}
-                                onValueChange={setPlayer2}
-                                items={playerNames}
-                            >
-                                <ComboboxInput placeholder="Player 2" className="w-48" />
-                                <ComboboxContent>
-                                    <ComboboxEmpty>No players found.</ComboboxEmpty>
-                                    <ComboboxList>
-                                        {(item) => (
-                                            <ComboboxItem key={item} value={item}>
-                                                {item}
-                                            </ComboboxItem>
-                                        )}
-                                    </ComboboxList>
-                                </ComboboxContent>
-                            </Combobox>
-                            <Button onClick={handleAddRule} disabled={!player1 || !player2 || player1 === player2}>
-                                Add Rule
-                            </Button>
-                        </div>
+                        <Form
+                            {...TargetController.store.form()}
+                            resetOnSuccess
+                            onSuccess={() => {
+                                setPlayer1(null);
+                                setPlayer2(null);
+                            }}
+                        >
+                            <div className="flex gap-3">
+                                <input type="hidden" name="player_1" value={p1?.id ?? ''} />
+                                <input type="hidden" name="player_2" value={p2?.id ?? ''} />
+                                <Combobox
+                                    value={player1}
+                                    onValueChange={setPlayer1}
+                                    items={playerNames}
+                                >
+                                    <ComboboxInput placeholder="Player 1" className="w-48" />
+                                    <ComboboxContent>
+                                        <ComboboxEmpty>No players found.</ComboboxEmpty>
+                                        <ComboboxList>
+                                            {(item) => (
+                                                <ComboboxItem key={item} value={item}>
+                                                    {item}
+                                                </ComboboxItem>
+                                            )}
+                                        </ComboboxList>
+                                    </ComboboxContent>
+                                </Combobox>
+                                <Combobox
+                                    value={player2}
+                                    onValueChange={setPlayer2}
+                                    items={playerNames}
+                                >
+                                    <ComboboxInput placeholder="Player 2" className="w-48" />
+                                    <ComboboxContent>
+                                        <ComboboxEmpty>No players found.</ComboboxEmpty>
+                                        <ComboboxList>
+                                            {(item) => (
+                                                <ComboboxItem key={item} value={item}>
+                                                    {item}
+                                                </ComboboxItem>
+                                            )}
+                                        </ComboboxList>
+                                    </ComboboxContent>
+                                </Combobox>
+                                <Button type="submit" disabled={!player1 || !player2 || player1 === player2}>
+                                    Add Rule
+                                </Button>
+                            </div>
+                        </Form>
                     </CardContent>
                 </Card>
 

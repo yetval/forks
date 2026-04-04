@@ -35,17 +35,6 @@ class Game extends Model
         return static::query()->firstOrFail();
     }
 
-    /**
-     * @return array<string, GameStage|bool>
-     */
-    public static function defaultAttributes(): array
-    {
-        return [
-            'stage' => GameStage::Pregame,
-            'auth_open' => false,
-        ];
-    }
-
     public function authIsOpen(): bool
     {
         return $this->auth_open;
