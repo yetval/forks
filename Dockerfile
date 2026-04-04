@@ -4,8 +4,8 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 FROM node:22-alpine AS node-builder
-RUN apk add --no-cache php84
-RUN ln -sf /usr/bin/php84 /usr/local/bin/php
+RUN apk add --no-cache php84 php84-iconv && \
+    ln -sf /usr/bin/php84 /usr/local/bin/php
 
 WORKDIR /app
 COPY . .
