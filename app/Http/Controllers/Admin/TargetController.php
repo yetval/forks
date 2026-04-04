@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreTargetRuleRequest;
 use App\Models\TargetRule;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class TargetController extends Controller
 {
-    public function store(StoreTargetRuleRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        TargetRule::create($request->validated());
+        $validated = $request->validate([
+            'player_1' => ['required', 'exists:users,id'],
+            'player_2' => ['required', 'exists:users,id', 'different:player_1'],
+        ]);
+
+        TargetRule::create($validated);
 
         return back();
     }

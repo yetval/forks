@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\GameStage;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\UpdateGameRequest;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,9 +28,15 @@ class GameController extends Controller
         ]);
     }
 
-    public function update(UpdateGameRequest $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        Game::current()->update($request->validated());
+        $validated = $request->validate([
+            'stage' => ['sometimes', 'required', Rule::enum(GameStage::class)],
+            'auth_open' => ['sometimes', 'required', 'boolean'],
+            'show_real_names' => ['sometimes', 'required', 'boolean'],
+        ]);
+
+        Game::current()->update($validated);
 
         return to_route('game');
     }

@@ -1,4 +1,31 @@
 services:
+  app:
+    image: serversideup/php:8.2-fpm
+    volumes:
+      - .:/var/www/html
+    env_file: .env
+    environment:
+      PHP_OPCACHE_ENABLE: "1"
+      AUTORUN_ENABLED: "true"
+      AUTORUN_LARAVEL_STORAGE_LINK: "true"
+      AUTORUN_LARAVEL_MIGRATION: "true"
+      AUTORUN_LARAVEL_CONFIG_CACHE: "true"
+      AUTORUN_LARAVEL_ROUTE_CACHE: "true"
+      AUTORUN_LARAVEL_VIEW_CACHE: "true"
+      AUTORUN_LARAVEL_EVENT_CACHE: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  node:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm ci && npm run build"
+    profiles:
+      - build
+
   db:
     image: postgres:16
     restart: unless-stopped
@@ -7,9 +34,7 @@ services:
       POSTGRES_PASSWORD: forkspass
       POSTGRES_DB: forks
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - ./storage/docker/psql:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U forks -d forks"]
       interval: 5s

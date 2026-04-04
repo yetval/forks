@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,13 +24,20 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
+        $validated = $request->validate([
+            'nickname' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:20'],
+            'dorm_location' => ['required', 'string', Rule::in(['1st South', '2nd South', '3rd South', '4th South', '2nd North', '3rd North', '4th North', '5th North'])],
+            'grade_year' => ['required', 'string', Rule::in(['Junior', 'Senior'])],
+        ]);
+
         $user = $request->user();
         $wasProfileComplete = $user->profile_completed;
 
         $user->update([
-            ...$request->validated(),
+            ...$validated,
             'profile_completed' => true,
         ]);
 
