@@ -118,7 +118,7 @@ export default function MainScene() {
 
     return (
         <>
-            // TODO cleaner way to get background color?
+            {/* TODO cleaner way to get background color? */}
             <color attach="background" args={['#0a0a0a']} />
             <fog attach="fog" args={['#0a0a0a', 5, 30]} />
 

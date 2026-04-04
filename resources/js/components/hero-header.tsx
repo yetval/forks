@@ -89,11 +89,15 @@ export default function HeroHeader() {
                             <a href="/forks-game-rules.pdf" target="_blank" className="text-lg text-zinc-200">
                                 Rules
                             </a>
-                            {auth.user && (
+                            {auth.user ? (
                                 <Link href={dashboard().url} className="text-lg text-zinc-200">
                                     Dashboard
                                 </Link>
-                            )}
+                            ) : game.auth_open ? (
+                                <Link href="/login" className="text-lg text-zinc-200">
+                                    Log in
+                                </Link>
+                            ) : null}
                         </nav>
                     </SheetContent>
                 </Sheet>
