@@ -5,7 +5,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 
 FROM node:22-alpine AS node-builder
 RUN apk add --no-cache php83
-    ln -sf /usr/bin/php83 /usr/local/bin/php
+RUN ln -sf /usr/bin/php83 /usr/local/bin/php
 
 WORKDIR /app
 COPY . .
