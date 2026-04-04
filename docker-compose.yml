@@ -1,9 +1,8 @@
-services:
-  app:
-    image: serversideup/php:8.2-fpm
+  forks:
+    image: serversideup/php:8.4-fpm
     volumes:
-      - .:/var/www/html
-    env_file: .env
+      - ./forks:/var/www/html
+    env_file: ./forks/.env
     environment:
       PHP_OPCACHE_ENABLE: "1"
       AUTORUN_ENABLED: "true"
@@ -14,19 +13,17 @@ services:
       AUTORUN_LARAVEL_VIEW_CACHE: "true"
       AUTORUN_LARAVEL_EVENT_CACHE: "true"
     depends_on:
-      db:
+      forks_db:
         condition: service_healthy
 
-  node:
+  forks_node:
     image: node:22-alpine
     working_dir: /app
     volumes:
-      - .:/app
+      - ./forks:/app
     command: sh -c "npm ci && npm run build"
-    profiles:
-      - build
 
-  db:
+  forks_db:
     image: postgres:16
     restart: unless-stopped
     environment:
@@ -34,12 +31,10 @@ services:
       POSTGRES_PASSWORD: forkspass
       POSTGRES_DB: forks
     volumes:
-      - ./storage/docker/psql:/var/lib/postgresql/data
+      - ./forks/storage/docker/psql:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U forks -d forks"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-volumes:
-  postgres_data:
