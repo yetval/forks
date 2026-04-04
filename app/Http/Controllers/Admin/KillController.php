@@ -37,7 +37,7 @@ class KillController extends Controller
     {
         $laterKillExists = Kill::query()
             ->where('killer_id', $kill->killer_id)
-            ->where('id', '>', $kill->id)
+            ->where('created_at', '>', $kill->created_at)
             ->exists();
 
         if ($laterKillExists) {

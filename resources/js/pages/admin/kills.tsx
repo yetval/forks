@@ -1,5 +1,6 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import { dismiss, revert } from '@/actions/App/Http/Controllers/Admin/KillController';
+import AlertError from '@/components/alert-error';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -41,10 +42,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Kills({ kills }: { kills: KillRecord[] }) {
+    const { errors } = usePage().props as { errors: Record<string, string> };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kills" />
             <div className="flex flex-col gap-6 p-4">
+                {errors.revert && <AlertError errors={[errors.revert]} />}
                 <Card>
                     <CardHeader>
                         <CardTitle>Kill History</CardTitle>

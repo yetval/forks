@@ -108,12 +108,12 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             }}
                         >
                             <div className="flex gap-3">
-                                <input type="hidden" name="player_1" value={player1Id ?? ''} />
-                                <input type="hidden" name="player_2" value={player2Id ?? ''} />
                                 <Combobox
+                                    name="player_1"
                                     value={player1Id}
                                     onValueChange={setPlayer1Id}
                                     items={playerIds}
+                                    itemToStringValue={(id) => String(id)}
                                     itemToStringLabel={playerName}
                                 >
                                     <ComboboxInput placeholder="Player 1" className="w-48" />
@@ -129,9 +129,11 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                     </ComboboxContent>
                                 </Combobox>
                                 <Combobox
+                                    name="player_2"
                                     value={player2Id}
                                     onValueChange={setPlayer2Id}
                                     items={playerIds}
+                                    itemToStringValue={(id) => String(id)}
                                     itemToStringLabel={playerName}
                                 >
                                     <ComboboxInput placeholder="Player 2" className="w-48" />
@@ -157,7 +159,7 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                 <Separator />
 
                 <div>
-                    <p className="text-muted-foreground mb-3 text-sm">{nonAdminPlayers.length} players</p>
+                    <p className="text-muted-foreground mb-3 text-sm">{players.length} players</p>
                     <div className="rounded-xl border">
                         <Table>
                             <TableHeader>

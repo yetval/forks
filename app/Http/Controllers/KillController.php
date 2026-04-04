@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -70,34 +69,32 @@ class KillController extends Controller
             return back()->withErrors(['victim_id' => 'You cannot eliminate yourself.']);
         }
 
-        return DB::transaction(function () use ($request, $killer) {
-            $victim = User::query()->lockForUpdate()->find($request->victim_id);
+        $victim = User::find($request->victim_id);
 
-            if (! $victim || ! $victim->alive) {
-                return back()->withErrors(['victim_id' => 'That player is already eliminated.']);
-            }
+        if (! $victim || ! $victim->alive) {
+            return back()->withErrors(['victim_id' => 'That player is already eliminated.']);
+        }
 
-            if ($victim->is_admin) {
-                return back()->withErrors(['victim_id' => 'You cannot eliminate an admin.']);
-            }
+        if ($victim->is_admin) {
+            return back()->withErrors(['victim_id' => 'You cannot eliminate an admin.']);
+        }
 
-            $killer->total_kills += 1;
-            $killer->save();
+        $killer->total_kills += 1;
+        $killer->save();
 
-            $victim->alive = false;
-            $victim->killed_by = $killer->id;
-            $victim->current_target_id = null;
-            $victim->save();
+        $victim->alive = false;
+        $victim->killed_by = $killer->id;
+        $victim->current_target_id = null;
+        $victim->save();
 
-            Kill::create([
-                'killer_id' => $killer->id,
-                'victim_id' => $victim->id,
-                'victim_prev_target_id' => null,
-                'is_ffa' => true,
-            ]);
+        Kill::create([
+            'killer_id' => $killer->id,
+            'victim_id' => $victim->id,
+            'victim_prev_target_id' => null,
+            'is_ffa' => true,
+        ]);
 
-            return back();
-        });
+        return back();
     }
 
     private function storeNormalKill(Request $request, User $killer): RedirectResponse
@@ -106,45 +103,36 @@ class KillController extends Controller
             'verification_name' => ['required', 'string'],
         ]);
 
-        return DB::transaction(function () use ($request, $killer) {
-            $killer = User::query()->lockForUpdate()->find($killer->id);
+        $victim = $killer->currentTarget;
+        if (! $victim) {
+            return back()->withErrors(['verification_name' => 'You have no target assigned.']);
+        }
 
-            $victim = $killer->currentTarget;
-            if (! $victim) {
-                return back()->withErrors(['verification_name' => 'You have no target assigned.']);
-            }
+        $victimsTarget = $victim->currentTarget;
+        if (! $victimsTarget) {
+            return back()->withErrors(['verification_name' => 'Could not verify — target has no next target.']);
+        }
 
-            $victim = User::query()->lockForUpdate()->find($victim->id);
-            if (! $victim->alive) {
-                return back()->withErrors(['verification_name' => 'Your target has already been eliminated.']);
-            }
+        if (strtolower(trim($request->verification_name)) !== strtolower(trim($victimsTarget->name))) {
+            return back()->withErrors(['verification_name' => 'Incorrect verification name.']);
+        }
 
-            $victimsTarget = $victim->currentTarget;
-            if (! $victimsTarget) {
-                return back()->withErrors(['verification_name' => 'Could not verify — target has no next target.']);
-            }
+        $killer->current_target_id = $victim->current_target_id;
+        $killer->total_kills += 1;
+        $killer->save();
 
-            if (strtolower(trim($request->verification_name)) !== strtolower(trim($victimsTarget->name))) {
-                return back()->withErrors(['verification_name' => 'Incorrect verification name.']);
-            }
+        $victim->alive = false;
+        $victim->killed_by = $killer->id;
+        $victim->current_target_id = null;
+        $victim->save();
 
-            $killer->current_target_id = $victim->current_target_id;
-            $killer->total_kills += 1;
-            $killer->save();
+        Kill::create([
+            'killer_id' => $killer->id,
+            'victim_id' => $victim->id,
+            'victim_prev_target_id' => $victimsTarget->id,
+        ]);
 
-            $victim->alive = false;
-            $victim->killed_by = $killer->id;
-            $victim->current_target_id = null;
-            $victim->save();
-
-            Kill::create([
-                'killer_id' => $killer->id,
-                'victim_id' => $victim->id,
-                'victim_prev_target_id' => $victimsTarget->id,
-            ]);
-
-            return back();
-        });
+        return back();
     }
 
     public function approve(): RedirectResponse

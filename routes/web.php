@@ -66,15 +66,10 @@ Route::get('/auth/google', function () {
 
 Route::get('/auth/google/callback', function () {
     $game = Game::current();
+    $googleUser = Socialite::driver('google')->user();
 
     if (! $game->authIsOpen()) {
         return to_route('login')->with('status', 'Logins are currently closed.');
-    }
-
-    try {
-        $googleUser = Socialite::driver('google')->user();
-    } catch (\Exception $e) {
-        return to_route('login')->with('status', 'Authentication failed. Please try again.');
     }
 
     $user = User::query()

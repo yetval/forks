@@ -55,9 +55,9 @@ class TargetController extends Controller
 
         $targetRules->each(function ($targetRule) use (&$players) {
             $player1Index = $players->search(fn ($p) => $p->id === $targetRule->player_1);
-            $player2Index = $players->search(fn ($p) => $p->id === $targetRule->player_2);
+            $player2Exists = $players->contains(fn ($p) => $p->id === $targetRule->player_2);
 
-            if ($player1Index === false || $player2Index === false) {
+            if ($player1Index === false || ! $player2Exists) {
                 return;
             }
 
