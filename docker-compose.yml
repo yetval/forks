@@ -1,29 +1,12 @@
-  forks:
-    image: serversideup/php:8.4-fpm
-    volumes:
-      - ./forks:/var/www/html
-    env_file: ./forks/.env
-    environment:
-      PHP_OPCACHE_ENABLE: "1"
-      AUTORUN_ENABLED: "true"
-      AUTORUN_LARAVEL_STORAGE_LINK: "true"
-      AUTORUN_LARAVEL_MIGRATION: "true"
-      AUTORUN_LARAVEL_CONFIG_CACHE: "true"
-      AUTORUN_LARAVEL_ROUTE_CACHE: "true"
-      AUTORUN_LARAVEL_VIEW_CACHE: "true"
-      AUTORUN_LARAVEL_EVENT_CACHE: "true"
+services:
+  app:
+    image: ghcr.io/evanston09/forks:main
+    env_file: .env
     depends_on:
-      forks_db:
+      db:
         condition: service_healthy
 
-  forks_node:
-    image: node:22-alpine
-    working_dir: /app
-    volumes:
-      - ./forks:/app
-    command: sh -c "npm ci && npm run build"
-
-  forks_db:
+  db:
     image: postgres:16
     restart: unless-stopped
     environment:
@@ -31,10 +14,9 @@
       POSTGRES_PASSWORD: forkspass
       POSTGRES_DB: forks
     volumes:
-      - ./forks/storage/docker/psql:/var/lib/postgresql/data
+      - ./storage/docker/psql:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U forks -d forks"]
       interval: 5s
       timeout: 5s
       retries: 5
-

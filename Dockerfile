@@ -17,7 +17,7 @@ COPY --from=composer-stage /app/bootstrap/cache ./bootstrap/cache
 
 RUN npm ci && npm run build
 
-FROM serversideup/php:8.4-fpm AS production
+FROM serversideup/php:8.4-fpm-nginx AS production
 
 COPY --chown=www-data:www-data . /var/www/html
 COPY --from=composer-stage --chown=www-data:www-data /app/vendor /var/www/html/vendor
