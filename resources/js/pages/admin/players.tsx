@@ -1,6 +1,7 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import TargetController from '@/actions/App/Http/Controllers/Admin/TargetController';
+import AlertError from '@/components/alert-error';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,6 +45,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Players({ players, targetRules }: { players: Player[]; targetRules: TargetRule[] }) {
+    const { errors } = usePage().props as { errors: Record<string, string> };
     const [player1Id, setPlayer1Id] = useState<number | null>(null);
     const [player2Id, setPlayer2Id] = useState<number | null>(null);
     const nonAdminPlayers = players.filter((p) => !p.is_admin);
@@ -99,6 +101,7 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             </div>
                         )}
 
+                        {errors.player_2 && <AlertError errors={[errors.player_2]} />}
                         <Form
                             {...TargetController.store.form()}
                             resetOnSuccess
