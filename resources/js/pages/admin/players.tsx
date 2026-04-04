@@ -44,13 +44,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Players', href: playersRoute().url },
 ];
 
+type PlayerOption = { value: number; label: string };
+
 export default function Players({ players, targetRules }: { players: Player[]; targetRules: TargetRule[] }) {
     const { errors } = usePage().props as { errors: Record<string, string> };
-    const [player1Id, setPlayer1Id] = useState<number | null>(null);
-    const [player2Id, setPlayer2Id] = useState<number | null>(null);
-    const nonAdminPlayers = players.filter((p) => !p.is_admin);
-    const playerIds = nonAdminPlayers.map((p) => p.id);
-    const playerName = (id: number) => nonAdminPlayers.find((p) => p.id === id)?.name ?? '';
+    const [player1, setPlayer1] = useState<PlayerOption | null>(null);
+    const [player2, setPlayer2] = useState<PlayerOption | null>(null);
+    const playerOptions: PlayerOption[] = players.filter((p) => !p.is_admin).map((p) => ({ value: p.id, label: p.name }));
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -106,26 +106,25 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             {...TargetController.store.form()}
                             resetOnSuccess
                             onSuccess={() => {
-                                setPlayer1Id(null);
-                                setPlayer2Id(null);
+                                setPlayer1(null);
+                                setPlayer2(null);
                             }}
                         >
                             <div className="flex gap-3">
                                 <Combobox
                                     name="player_1"
-                                    value={player1Id}
-                                    onValueChange={setPlayer1Id}
-                                    items={playerIds}
-                                    itemToStringValue={(id) => String(id)}
-                                    itemToStringLabel={playerName}
+                                    value={player1}
+                                    onValueChange={setPlayer1}
+                                    items={playerOptions}
+                                    isItemEqualToValue={(item, val) => item.value === val?.value}
                                 >
                                     <ComboboxInput placeholder="Player 1" className="w-48" />
                                     <ComboboxContent>
                                         <ComboboxEmpty>No players found.</ComboboxEmpty>
                                         <ComboboxList>
-                                            {(item) => (
-                                                <ComboboxItem key={item} value={item}>
-                                                    {playerName(item)}
+                                            {(option) => (
+                                                <ComboboxItem key={option.value} value={option}>
+                                                    {option.label}
                                                 </ComboboxItem>
                                             )}
                                         </ComboboxList>
@@ -133,25 +132,24 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                 </Combobox>
                                 <Combobox
                                     name="player_2"
-                                    value={player2Id}
-                                    onValueChange={setPlayer2Id}
-                                    items={playerIds}
-                                    itemToStringValue={(id) => String(id)}
-                                    itemToStringLabel={playerName}
+                                    value={player2}
+                                    onValueChange={setPlayer2}
+                                    items={playerOptions}
+                                    isItemEqualToValue={(item, val) => item.value === val?.value}
                                 >
                                     <ComboboxInput placeholder="Player 2" className="w-48" />
                                     <ComboboxContent>
                                         <ComboboxEmpty>No players found.</ComboboxEmpty>
                                         <ComboboxList>
-                                            {(item) => (
-                                                <ComboboxItem key={item} value={item}>
-                                                    {playerName(item)}
+                                            {(option) => (
+                                                <ComboboxItem key={option.value} value={option}>
+                                                    {option.label}
                                                 </ComboboxItem>
                                             )}
                                         </ComboboxList>
                                     </ComboboxContent>
                                 </Combobox>
-                                <Button type="submit" disabled={!player1Id || !player2Id || player1Id === player2Id}>
+                                <Button type="submit" disabled={!player1 || !player2 || player1.value === player2.value}>
                                     Add Rule
                                 </Button>
                             </div>
