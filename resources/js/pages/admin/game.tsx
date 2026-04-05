@@ -131,7 +131,7 @@ export default function Game({ stats }: { stats: GameStats }) {
                                 <Card
                                     key={stage.value}
                                     className={
-                                        isCurrent ? 'border-primary ring-primary/20 ring-2' : undefined
+                                        isCurrent ? 'border border-primary ring-primary/20 ring-2' : undefined
                                     }
                                 >
                                     <CardHeader>

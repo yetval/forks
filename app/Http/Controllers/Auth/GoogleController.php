@@ -21,15 +21,15 @@ class GoogleController extends Controller
         $game = Game::current();
         $googleUser = Socialite::driver('google')->user();
 
-        if (! $game->authIsOpen()) {
+        $isAdmin = in_array($googleUser->getEmail(), config('game.admin_emails'));
+
+        if (! $game->authIsOpen() && ! $isAdmin) {
             return to_route('login')->with('status', 'Logins are currently closed.');
         }
 
         if (! str_ends_with($googleUser->getEmail(), '@ncssm.edu')) {
             return to_route('login')->with('status', 'You must use an NCSSM email to log in.');
         }
-
-        $isAdmin = in_array($googleUser->getEmail(), config('game.admin_emails'));
 
         $user = User::query()
             ->where('google_id', $googleUser->getId())
