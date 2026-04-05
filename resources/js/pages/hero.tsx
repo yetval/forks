@@ -23,7 +23,7 @@ function HeroTitle() {
             ref={ref}
             className="absolute top-0 flex h-screen w-full flex-col items-center justify-center pointer-events-none"
         >
-            <p className="text-sm font-extralight uppercase tracking-[0.3em] text-zinc-400">
+            <p className="text-sm font-extralight uppercase tracking-widest text-zinc-400">
                 NCSSM Morganton
             </p>
             <h1 className="mt-2 text-7xl sm:text-8xl md:text-[10rem] leading-none font-bold tracking-tighter text-white uppercase">
@@ -82,7 +82,7 @@ export default function Hero() {
                                 <h1 className="text-8xl sm:text-9xl md:text-[14rem] leading-none font-bold tracking-tighter text-white uppercase">
                                     FORKS
                                 </h1>
-                                <p className="text-xs font-extralight tracking-widest text-zinc-500 uppercase">
+                                <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                                     NCSSM Morganton
                                 </p>
                             </div>
@@ -188,7 +188,7 @@ export default function Hero() {
                             </div>
 
                             <div className="absolute top-[895vh] flex w-full items-center justify-center">
-                                <p className="text-sm font-extralight tracking-wide text-zinc-500">
+                                <p className="text-sm font-extralight tracking-widest text-zinc-500">
                                     Built with ❤️ by <a href="https://evankim.me" className="underline">Evan Kim '27</a>.
                                 </p>
                             </div>
