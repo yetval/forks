@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('approved')->default(false);
             $table->boolean('is_ffa')->default(false);
             $table->boolean('contested')->default(false);
-            $table->string('contest_reason')->nullable()->after('contested');
+            $table->text('contest_reason')->nullable()->after('contested');
             $table->timestamps();
         });
     }

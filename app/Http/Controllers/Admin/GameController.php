@@ -16,8 +16,8 @@ class GameController extends Controller
 {
     public function index(): Response
     {
-        $total = User::query()->count();
-        $alive = User::query()->where('alive', true)->count();
+        $total = User::query()->where('is_admin', false)->count();
+        $alive = User::query()->where('is_admin', false)->where('alive', true)->count();
 
         return Inertia::render('admin/game', [
             'stats' => [
@@ -31,9 +31,9 @@ class GameController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'stage' => ['sometimes', 'required', Rule::enum(GameStage::class)],
-            'auth_open' => ['sometimes', 'required', 'boolean'],
-            'show_real_names' => ['sometimes', 'required', 'boolean'],
+            'stage' => ['sometimes', Rule::enum(GameStage::class)],
+            'auth_open' => ['sometimes', 'boolean'],
+            'show_real_names' => ['sometimes', 'boolean'],
         ]);
 
         Game::current()->update($validated);

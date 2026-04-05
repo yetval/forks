@@ -17,6 +17,15 @@ class TargetController extends Controller
             'player_2' => ['required', 'exists:users,id', 'different:player_1'],
         ]);
 
+        $exists = TargetRule::query()
+            ->where('player_1', $validated['player_1'])
+            ->where('player_2', $validated['player_2'])
+            ->exists();
+
+        if ($exists) {
+            return back()->withErrors(['player_2' => 'A target rule already exists for these players.']);
+        }
+
         TargetRule::create($validated);
 
         return back();
@@ -33,6 +42,7 @@ class TargetController extends Controller
     {
         $players = User::query()
             ->where('is_admin', false)
+            ->where('alive', true)
             ->get()
             ->shuffle()
             ->values();
@@ -45,6 +55,12 @@ class TargetController extends Controller
 
         $targetRules->each(function ($targetRule) use (&$players) {
             $player1Index = $players->search(fn ($p) => $p->id === $targetRule->player_1);
+            $player2Exists = $players->contains(fn ($p) => $p->id === $targetRule->player_2);
+
+            if ($player1Index === false || ! $player2Exists) {
+                return;
+            }
+
             $removedPlayer = $players->pull($player1Index);
             $players = $players->values();
 

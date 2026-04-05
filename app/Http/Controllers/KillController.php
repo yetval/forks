@@ -27,7 +27,7 @@ class KillController extends Controller
         }
 
         $alivePlayers = $game->ffa
-            ? User::query()->where('alive', true)->where('id', '!=', $user->id)->get(['id', 'name', 'nickname'])
+            ? User::query()->where('alive', true)->where('is_admin', false)->where('id', '!=', $user->id)->get(['id', 'name', 'nickname'])
             : [];
 
         return Inertia::render('targets', [
@@ -71,8 +71,12 @@ class KillController extends Controller
 
         $victim = User::find($request->victim_id);
 
-        if (! $victim->alive) {
+        if (! $victim || ! $victim->alive) {
             return back()->withErrors(['victim_id' => 'That player is already eliminated.']);
+        }
+
+        if ($victim->is_admin) {
+            return back()->withErrors(['victim_id' => 'You cannot eliminate an admin.']);
         }
 
         $killer->total_kills += 1;
@@ -163,7 +167,11 @@ class KillController extends Controller
         $kill = Kill::where('victim_id', $user->id)->firstOrFail();
 
         if ($kill->approved) {
-            return back()->withErrors(['contest_reason' => 'You have already approved this kill.']);
+            return back()->withErrors(['contest_reason' => 'This kill has already been approved.']);
+        }
+
+        if ($kill->contested) {
+            return back()->withErrors(['contest_reason' => 'You have already contested this kill.']);
         }
 
         $kill->update([

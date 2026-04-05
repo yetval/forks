@@ -1,6 +1,7 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import TargetController from '@/actions/App/Http/Controllers/Admin/TargetController';
+import AlertError from '@/components/alert-error';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,13 +44,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Players', href: playersRoute().url },
 ];
 
-export default function Players({ players, targetRules }: { players: Player[]; targetRules: TargetRule[] }) {
-    const [player1, setPlayer1] = useState<string | null>(null);
-    const [player2, setPlayer2] = useState<string | null>(null);
-    const playerNames = players.filter((p) => !p.is_admin).map((p) => p.name);
+type PlayerOption = { value: number; label: string };
 
-    const p1 = players.find((p) => p.name === player1);
-    const p2 = players.find((p) => p.name === player2);
+export default function Players({ players, targetRules }: { players: Player[]; targetRules: TargetRule[] }) {
+    const { errors } = usePage().props as { errors: Record<string, string> };
+    const [player1, setPlayer1] = useState<PlayerOption | null>(null);
+    const [player2, setPlayer2] = useState<PlayerOption | null>(null);
+    const playerOptions: PlayerOption[] = players.filter((p) => !p.is_admin).map((p) => ({ value: p.id, label: p.name }));
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -100,6 +101,7 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             </div>
                         )}
 
+                        {errors.player_2 && <AlertError errors={[errors.player_2]} />}
                         <Form
                             {...TargetController.store.form()}
                             resetOnSuccess
@@ -109,43 +111,45 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             }}
                         >
                             <div className="flex gap-3">
-                                <input type="hidden" name="player_1" value={p1?.id ?? ''} />
-                                <input type="hidden" name="player_2" value={p2?.id ?? ''} />
                                 <Combobox
+                                    name="player_1"
                                     value={player1}
                                     onValueChange={setPlayer1}
-                                    items={playerNames}
+                                    items={playerOptions}
+                                    isItemEqualToValue={(item, val) => item.value === val?.value}
                                 >
                                     <ComboboxInput placeholder="Player 1" className="w-48" />
                                     <ComboboxContent>
                                         <ComboboxEmpty>No players found.</ComboboxEmpty>
                                         <ComboboxList>
-                                            {(item) => (
-                                                <ComboboxItem key={item} value={item}>
-                                                    {item}
+                                            {(option) => (
+                                                <ComboboxItem key={option.value} value={option}>
+                                                    {option.label}
                                                 </ComboboxItem>
                                             )}
                                         </ComboboxList>
                                     </ComboboxContent>
                                 </Combobox>
                                 <Combobox
+                                    name="player_2"
                                     value={player2}
                                     onValueChange={setPlayer2}
-                                    items={playerNames}
+                                    items={playerOptions}
+                                    isItemEqualToValue={(item, val) => item.value === val?.value}
                                 >
                                     <ComboboxInput placeholder="Player 2" className="w-48" />
                                     <ComboboxContent>
                                         <ComboboxEmpty>No players found.</ComboboxEmpty>
                                         <ComboboxList>
-                                            {(item) => (
-                                                <ComboboxItem key={item} value={item}>
-                                                    {item}
+                                            {(option) => (
+                                                <ComboboxItem key={option.value} value={option}>
+                                                    {option.label}
                                                 </ComboboxItem>
                                             )}
                                         </ComboboxList>
                                     </ComboboxContent>
                                 </Combobox>
-                                <Button type="submit" disabled={!player1 || !player2 || player1 === player2}>
+                                <Button type="submit" disabled={!player1 || !player2 || player1.value === player2.value}>
                                     Add Rule
                                 </Button>
                             </div>

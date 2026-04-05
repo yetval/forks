@@ -26,6 +26,7 @@ class KillController extends Controller
     {
         $kill->update([
             'contested' => false,
+            'contest_reason' => null,
             'approved' => true,
         ]);
 
@@ -34,6 +35,15 @@ class KillController extends Controller
 
     public function revert(Kill $kill): RedirectResponse
     {
+        $laterKillExists = Kill::query()
+            ->where('killer_id', $kill->killer_id)
+            ->where('created_at', '>', $kill->created_at)
+            ->exists();
+
+        if ($laterKillExists) {
+            return back()->withErrors(['revert' => 'Cannot revert this kill — the killer has made subsequent kills. Revert those first.']);
+        }
+
         $victim = $kill->victim;
         $killer = $kill->killer;
 
