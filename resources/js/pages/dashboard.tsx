@@ -1,6 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
 import { Activity, type LucideIcon, MoonStar, ShieldMinus, Skull, Sun, Sunrise, Sword, Users } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
@@ -47,13 +47,6 @@ function getGreetingDetails(hour: number) {
     return { message: 'Good evening', icon: MoonStar };
 }
 
-function getCurrentGreetingDetails() {
-    if (typeof window === 'undefined') {
-        return getGreetingDetails(12);
-    }
-
-    return getGreetingDetails(new Date().getHours());
-}
 
 function StatCard({
     title,
@@ -128,7 +121,11 @@ export default function Dashboard({
     superlatives,
 }: DashboardProps) {
     const { auth } = usePage().props;
-    const [greeting] = useState(getCurrentGreetingDetails);
+    const [greeting, setGreeting] = useState(() => getGreetingDetails(12));
+
+    useEffect(() => {
+        setGreeting(getGreetingDetails(new Date().getHours()));
+    }, []);
 
     const GreetingIcon = greeting.icon;
 

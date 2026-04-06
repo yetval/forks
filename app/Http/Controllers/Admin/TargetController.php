@@ -7,6 +7,7 @@ use App\Models\TargetRule;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TargetController extends Controller
 {
@@ -40,40 +41,42 @@ class TargetController extends Controller
 
     public function assignTargets(): RedirectResponse
     {
-        $players = User::query()
-            ->where('is_admin', false)
-            ->where('alive', true)
-            ->get()
-            ->shuffle()
-            ->values();
+        return DB::transaction(function () {
+            $players = User::query()
+                ->where('is_admin', false)
+                ->where('alive', true)
+                ->get()
+                ->shuffle()
+                ->values();
 
-        if ($players->count() < 2) {
-            return back();
-        }
-
-        $targetRules = TargetRule::all();
-
-        $targetRules->each(function ($targetRule) use (&$players) {
-            $player1Index = $players->search(fn ($p) => $p->id === $targetRule->player_1);
-            $player2Exists = $players->contains(fn ($p) => $p->id === $targetRule->player_2);
-
-            if ($player1Index === false || ! $player2Exists) {
-                return;
+            if ($players->count() < 2) {
+                return back();
             }
 
-            $removedPlayer = $players->pull($player1Index);
-            $players = $players->values();
+            $targetRules = TargetRule::all();
 
-            $player2Index = $players->search(fn ($p) => $p->id === $targetRule->player_2);
-            $players->splice($player2Index, 0, [$removedPlayer]);
+            $targetRules->each(function ($targetRule) use (&$players) {
+                $player1Index = $players->search(fn ($p) => $p->id === $targetRule->player_1);
+                $player2Exists = $players->contains(fn ($p) => $p->id === $targetRule->player_2);
+
+                if ($player1Index === false || ! $player2Exists) {
+                    return;
+                }
+
+                $removedPlayer = $players->pull($player1Index);
+                $players = $players->values();
+
+                $player2Index = $players->search(fn ($p) => $p->id === $targetRule->player_2);
+                $players->splice($player2Index, 0, [$removedPlayer]);
+            });
+
+            $players->each(function ($player, $index) use ($players) {
+                $player->current_target_id = $players[($index + 1) % $players->count()]->id;
+                $player->save();
+            });
+
+            return back();
         });
-
-        $players->each(function ($player, $index) use ($players) {
-            $player->current_target_id = $players[($index + 1) % $players->count()]->id;
-            $player->save();
-        });
-
-        return back();
     }
 
     public function clearTargets(): RedirectResponse
