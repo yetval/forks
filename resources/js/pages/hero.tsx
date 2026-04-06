@@ -49,23 +49,25 @@ export default function Hero() {
                             <HeroTitle />
 
                             <div className="absolute top-[150vh] flex h-screen w-full items-center justify-center px-8">
-                                <p className="text-center text-xl font-extralight tracking-widest text-zinc-300 uppercase">
-                                    One night, a fork will
-                                    <br />
-                                    <span className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white">
+                                <div className="text-center">
+                                    <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
+                                        One night, a fork will
+                                    </p>
+                                    <p className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white uppercase">
                                         slide under your door.
-                                    </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="absolute top-[300vh] flex h-screen w-full items-center justify-center px-8">
-                                <p className="text-center text-xl font-extralight tracking-widest text-zinc-300 uppercase">
-                                    On it —
-                                    <br />
-                                    <span className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white">
+                                <div className="text-center">
+                                    <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
+                                        On it —
+                                    </p>
+                                    <p className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white uppercase">
                                         someone else's name.
-                                    </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="absolute top-[400vh] flex h-screen w-full flex-col items-center justify-center gap-2">
