@@ -13,6 +13,8 @@ jobs:
     uses: ./.github/workflows/tests.yml
 
   lint:
+    permissions:
+      contents: write
     uses: ./.github/workflows/lint.yml
 
   build-and-push-image:
