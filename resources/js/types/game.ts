@@ -4,4 +4,5 @@ export type GameState = {
     auth_open: boolean;
     ffa: boolean;
     show_real_names: boolean;
+    start: string;
 };

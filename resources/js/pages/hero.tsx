@@ -7,8 +7,6 @@ import HeroHeader from '@/components/hero-header';
 import { Button } from '@/components/ui/button';
 import MainScene from '@/scenes/main-scene';
 
-const GAME_START = new Date('2026-05-01T00:00:00');
-
 function HeroTitle() {
     const ref = useRef<HTMLDivElement>(null!);
     const scroll = useScroll();
@@ -176,7 +174,7 @@ export default function Hero() {
 
                             {/* Page 9: CTA + Countdown */}
                             <div className="absolute top-[800vh] flex h-screen w-full flex-col items-center justify-center">
-                                <Countdown target={GAME_START} />
+                                <Countdown target={new Date(game.start)} />
                                 <Button
                                     asChild={game.auth_open}
                                     disabled={!game.auth_open}
