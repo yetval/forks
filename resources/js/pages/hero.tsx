@@ -184,7 +184,7 @@ export default function Hero() {
 
                             <div className="absolute top-[895vh] flex w-full items-center justify-center">
                                 <p className="text-sm font-extralight tracking-widest text-zinc-500">
-                                    Built with <3 by <a href="https://evankim.me" className="underline">Evan Kim '27</a>.
+                                    Built with {"<3"} by <a href="https://evankim.me" className="underline">Evan Kim '27</a>.
                                 </p>
                             </div>
                         </Scroll>
