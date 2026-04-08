@@ -21,10 +21,16 @@ export default function Login({ status }: { status?: string }) {
             ) : null}
             {game.auth_open ? (
                 <a href="/auth/google" className="flex justify-center">
-                    <img src={googleSignIn} alt="Sign in with Google" height={40} />
+                    <img
+                        src={googleSignIn}
+                        alt="Sign in with Google"
+                        height={40}
+                    />
                 </a>
             ) : (
-                <p className="text-muted-foreground text-center text-sm">Logins are currently closed</p>
+                <p className="text-center text-sm text-muted-foreground">
+                    Logins are currently closed
+                </p>
             )}
         </AuthLayout>
     );

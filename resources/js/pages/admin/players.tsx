@@ -5,7 +5,14 @@ import AlertError from '@/components/alert-error';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from '@/components/ui/combobox';
+import {
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from '@/components/ui/combobox';
 import { Separator } from '@/components/ui/separator';
 import {
     Table,
@@ -30,8 +37,16 @@ type Player = {
     alive: boolean;
     total_kills: number;
     is_admin: boolean;
-    current_target: { id: number; name: string; nickname: string | null } | null;
-    killed_by_user: { id: number; name: string; nickname: string | null } | null;
+    current_target: {
+        id: number;
+        name: string;
+        nickname: string | null;
+    } | null;
+    killed_by_user: {
+        id: number;
+        name: string;
+        nickname: string | null;
+    } | null;
 };
 
 type TargetRule = {
@@ -46,11 +61,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type PlayerOption = { value: number; label: string };
 
-export default function Players({ players, targetRules }: { players: Player[]; targetRules: TargetRule[] }) {
+export default function Players({
+    players,
+    targetRules,
+}: {
+    players: Player[];
+    targetRules: TargetRule[];
+}) {
     const { errors } = usePage().props as { errors: Record<string, string> };
     const [player1, setPlayer1] = useState<PlayerOption | null>(null);
     const [player2, setPlayer2] = useState<PlayerOption | null>(null);
-    const playerOptions: PlayerOption[] = players.filter((p) => !p.is_admin).map((p) => ({ value: p.id, label: p.name }));
+    const playerOptions: PlayerOption[] = players
+        .filter((p) => !p.is_admin)
+        .map((p) => ({ value: p.id, label: p.name }));
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -58,9 +81,7 @@ export default function Players({ players, targetRules }: { players: Player[]; t
             <div className="flex flex-col gap-6 p-4">
                 <div className="flex gap-3">
                     <Form {...TargetController.assignTargets.form()}>
-                        <Button type="submit">
-                            Create Targets
-                        </Button>
+                        <Button type="submit">Create Targets</Button>
                     </Form>
                     <Form {...TargetController.clearTargets.form()}>
                         <Button type="submit" variant="destructive">
@@ -87,11 +108,26 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                     <TableBody>
                                         {targetRules.map((rule) => (
                                             <TableRow key={rule.id}>
-                                                <TableCell>{rule.player1.name}</TableCell>
-                                                <TableCell>{rule.player2.name}</TableCell>
                                                 <TableCell>
-                                                    <Form {...TargetController.destroy.form(rule.id)} method="delete">
-                                                        <Button type="submit" variant="destructive" size="sm">Delete</Button>
+                                                    {rule.player1.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {rule.player2.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Form
+                                                        {...TargetController.destroy.form(
+                                                            rule.id,
+                                                        )}
+                                                        method="delete"
+                                                    >
+                                                        <Button
+                                                            type="submit"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                        >
+                                                            Delete
+                                                        </Button>
                                                     </Form>
                                                 </TableCell>
                                             </TableRow>
@@ -101,7 +137,9 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                             </div>
                         )}
 
-                        {errors.player_2 && <AlertError errors={[errors.player_2]} />}
+                        {errors.player_2 && (
+                            <AlertError errors={[errors.player_2]} />
+                        )}
                         <Form
                             {...TargetController.store.form()}
                             resetOnSuccess
@@ -116,14 +154,24 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                     value={player1}
                                     onValueChange={setPlayer1}
                                     items={playerOptions}
-                                    isItemEqualToValue={(item, val) => item.value === val?.value}
+                                    isItemEqualToValue={(item, val) =>
+                                        item.value === val?.value
+                                    }
                                 >
-                                    <ComboboxInput placeholder="Player 1" className="w-48" />
+                                    <ComboboxInput
+                                        placeholder="Player 1"
+                                        className="w-48"
+                                    />
                                     <ComboboxContent>
-                                        <ComboboxEmpty>No players found.</ComboboxEmpty>
+                                        <ComboboxEmpty>
+                                            No players found.
+                                        </ComboboxEmpty>
                                         <ComboboxList>
                                             {(option) => (
-                                                <ComboboxItem key={option.value} value={option}>
+                                                <ComboboxItem
+                                                    key={option.value}
+                                                    value={option}
+                                                >
                                                     {option.label}
                                                 </ComboboxItem>
                                             )}
@@ -135,21 +183,38 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                     value={player2}
                                     onValueChange={setPlayer2}
                                     items={playerOptions}
-                                    isItemEqualToValue={(item, val) => item.value === val?.value}
+                                    isItemEqualToValue={(item, val) =>
+                                        item.value === val?.value
+                                    }
                                 >
-                                    <ComboboxInput placeholder="Player 2" className="w-48" />
+                                    <ComboboxInput
+                                        placeholder="Player 2"
+                                        className="w-48"
+                                    />
                                     <ComboboxContent>
-                                        <ComboboxEmpty>No players found.</ComboboxEmpty>
+                                        <ComboboxEmpty>
+                                            No players found.
+                                        </ComboboxEmpty>
                                         <ComboboxList>
                                             {(option) => (
-                                                <ComboboxItem key={option.value} value={option}>
+                                                <ComboboxItem
+                                                    key={option.value}
+                                                    value={option}
+                                                >
                                                     {option.label}
                                                 </ComboboxItem>
                                             )}
                                         </ComboboxList>
                                     </ComboboxContent>
                                 </Combobox>
-                                <Button type="submit" disabled={!player1 || !player2 || player1.value === player2.value}>
+                                <Button
+                                    type="submit"
+                                    disabled={
+                                        !player1 ||
+                                        !player2 ||
+                                        player1.value === player2.value
+                                    }
+                                >
                                     Add Rule
                                 </Button>
                             </div>
@@ -160,7 +225,9 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                 <Separator />
 
                 <div>
-                    <p className="text-muted-foreground mb-3 text-sm">{players.length} players</p>
+                    <p className="mb-3 text-sm text-muted-foreground">
+                        {players.length} players
+                    </p>
                     <div className="rounded-xl border">
                         <Table>
                             <TableHeader>
@@ -182,22 +249,45 @@ export default function Players({ players, targetRules }: { players: Player[]; t
                                         <TableCell>
                                             {player.name}
                                             {player.is_admin && (
-                                                <Badge variant="outline" className="ml-2">Admin</Badge>
+                                                <Badge
+                                                    variant="outline"
+                                                    className="ml-2"
+                                                >
+                                                    Admin
+                                                </Badge>
                                             )}
                                         </TableCell>
-                                        <TableCell>{player.nickname ?? '-'}</TableCell>
-                                        <TableCell>{player.dorm_location ?? '-'}</TableCell>
-                                        <TableCell>{player.grade_year ?? '-'}</TableCell>
-                                        <TableCell>{player.phone ?? '-'}</TableCell>
+                                        <TableCell>
+                                            {player.nickname ?? '-'}
+                                        </TableCell>
+                                        <TableCell>
+                                            {player.dorm_location ?? '-'}
+                                        </TableCell>
+                                        <TableCell>
+                                            {player.grade_year ?? '-'}
+                                        </TableCell>
+                                        <TableCell>
+                                            {player.phone ?? '-'}
+                                        </TableCell>
                                         <TableCell>
                                             {player.current_target
                                                 ? player.current_target.name
                                                 : '-'}
                                         </TableCell>
-                                        <TableCell>{player.total_kills}</TableCell>
                                         <TableCell>
-                                            <Badge variant={player.alive ? 'default' : 'destructive'}>
-                                                {player.alive ? 'Alive' : 'Dead'}
+                                            {player.total_kills}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant={
+                                                    player.alive
+                                                        ? 'default'
+                                                        : 'destructive'
+                                                }
+                                            >
+                                                {player.alive
+                                                    ? 'Alive'
+                                                    : 'Dead'}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>

@@ -1,5 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Gamepad2, LayoutGrid, Skull, Target, Trophy, Users } from 'lucide-react';
+import {
+    Gamepad2,
+    LayoutGrid,
+    Skull,
+    Target,
+    Trophy,
+    Users,
+} from 'lucide-react';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -60,7 +67,11 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch className="group-data-[collapsible=icon]:justify-center">
+                            <Link
+                                href={dashboard()}
+                                prefetch
+                                className="group-data-[collapsible=icon]:justify-center"
+                            >
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -69,8 +80,16 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={auth.user.is_admin ? mainNavItems.filter((i) => i.title !== 'Targets') : mainNavItems} />
-                {auth.user.is_admin && <NavMain items={adminNavItems} label="Admin" />}
+                <NavMain
+                    items={
+                        auth.user.is_admin
+                            ? mainNavItems.filter((i) => i.title !== 'Targets')
+                            : mainNavItems
+                    }
+                />
+                {auth.user.is_admin && (
+                    <NavMain items={adminNavItems} label="Admin" />
+                )}
             </SidebarContent>
 
             <SidebarFooter>

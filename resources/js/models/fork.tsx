@@ -1,21 +1,23 @@
 import { useGLTF } from '@react-three/drei';
 import type { ThreeElements } from '@react-three/fiber';
-import type * as THREE from 'three'
-import type { GLTF } from 'three-stdlib'
+import type * as THREE from 'three';
+import type { GLTF } from 'three-stdlib';
 
 type GLTFResult = GLTF & {
     nodes: {
-        Object_4: THREE.Mesh
-        Object_5: THREE.Mesh
-    }
+        Object_4: THREE.Mesh;
+        Object_5: THREE.Mesh;
+    };
     materials: {
-        ['Plastic_Glass_Shader.002']: THREE.MeshStandardMaterial
-    }
-}
-type GroupProps = ThreeElements['group']
+        ['Plastic_Glass_Shader.002']: THREE.MeshStandardMaterial;
+    };
+};
+type GroupProps = ThreeElements['group'];
 
-export default function Fork(props: GroupProps){
-    const { nodes, materials } = useGLTF('/plastic_fork.glb') as unknown as GLTFResult
+export default function Fork(props: GroupProps) {
+    const { nodes, materials } = useGLTF(
+        '/plastic_fork.glb',
+    ) as unknown as GLTFResult;
     return (
         <group {...props} dispose={null}>
             <mesh
@@ -31,7 +33,7 @@ export default function Fork(props: GroupProps){
                 material={materials['Plastic_Glass_Shader.002']}
             />
         </group>
-    )
+    );
 }
 
-useGLTF.preload('/plastic_fork.glb')
+useGLTF.preload('/plastic_fork.glb');

@@ -71,7 +71,14 @@ export default function MainScene() {
 
         if (r3 > 0.01) {
             // Page 5+: spinning
-            const targetPosX = r5 > 0.01 ? -0.25 : r4 > 0.01 ? (isMobile ? -0.25 : 0.075) : -0.25;
+            const targetPosX =
+                r5 > 0.01
+                    ? -0.25
+                    : r4 > 0.01
+                      ? isMobile
+                          ? -0.25
+                          : 0.075
+                      : -0.25;
             forkRef.current.position.x = MathUtils.damp(
                 forkRef.current.position.x,
                 targetPosX,

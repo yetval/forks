@@ -1,7 +1,24 @@
 import { Head, usePage } from '@inertiajs/react';
-import { Activity, type LucideIcon, MoonStar, ShieldMinus, Skull, Sun, Sunrise, Sword, Users } from 'lucide-react';
+import {
+    Activity,
+    type LucideIcon,
+    MoonStar,
+    ShieldMinus,
+    Skull,
+    Sun,
+    Sunrise,
+    Sword,
+    Users,
+} from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
@@ -73,11 +90,11 @@ function StatCard({
                     <CardDescription>{title}</CardDescription>
                     <CardTitle className="mt-2 text-3xl">{value}</CardTitle>
                 </div>
-                <CardAction className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full self-center">
+                <CardAction className="flex size-10 items-center justify-center self-center rounded-full bg-primary/10 text-primary">
                     <Icon className="size-5" />
                 </CardAction>
             </CardHeader>
-            <CardContent className="text-muted-foreground text-sm">
+            <CardContent className="text-sm text-muted-foreground">
                 {description}
             </CardContent>
         </Card>
@@ -104,29 +121,27 @@ function SuperlativeCard({
             <CardHeader className="pb-3">
                 <div>
                     <CardDescription>{title}</CardDescription>
-                    <CardTitle className="mt-2 truncate text-2xl">{label}</CardTitle>
+                    <CardTitle className="mt-2 truncate text-2xl">
+                        {label}
+                    </CardTitle>
                 </div>
-                <CardAction className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full self-center">
+                <CardAction className="flex size-10 items-center justify-center self-center rounded-full bg-primary/10 text-primary">
                     <Icon className="size-5" />
                 </CardAction>
             </CardHeader>
             <CardContent className="space-y-1">
                 <p className="text-3xl font-semibold">{kills}</p>
-                <p className="text-muted-foreground text-sm">
-                    {kills === 1 ? 'kill' : 'kills'} from {players} {players === 1 ? 'player' : 'players'}
+                <p className="text-sm text-muted-foreground">
+                    {kills === 1 ? 'kill' : 'kills'} from {players}{' '}
+                    {players === 1 ? 'player' : 'players'}
                 </p>
-                <p className="text-muted-foreground text-sm">
-                    {description}
-                </p>
+                <p className="text-sm text-muted-foreground">{description}</p>
             </CardContent>
         </Card>
     );
 }
 
-export default function Dashboard({
-    summary,
-    superlatives,
-}: DashboardProps) {
+export default function Dashboard({ summary, superlatives }: DashboardProps) {
     const { auth } = usePage().props;
     const [greeting] = useState(getCurrentGreetingDetails);
 
@@ -138,11 +153,13 @@ export default function Dashboard({
             <div className="flex flex-col gap-6 p-4">
                 <Card>
                     <CardHeader className="flex-row items-center gap-3 py-8 sm:px-8">
-                        <div className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full">
+                        <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                             <GreetingIcon className="size-6" />
                         </div>
                         <div>
-                            <CardDescription className="uppercase">Player dashboard</CardDescription>
+                            <CardDescription className="uppercase">
+                                Player dashboard
+                            </CardDescription>
                             <CardTitle className="text-3xl tracking-tight sm:text-4xl">
                                 {greeting.message}, {auth.user.name}
                             </CardTitle>

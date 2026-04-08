@@ -29,7 +29,9 @@ type GLTFResult = GLTF & {
 };
 
 export default function Door({ opacity = 1, ...props }: DoorProps) {
-    const { nodes, materials } = useGLTF('/door_with_frame.glb') as unknown as GLTFResult;
+    const { nodes, materials } = useGLTF(
+        '/door_with_frame.glb',
+    ) as unknown as GLTFResult;
 
     useEffect(() => {
         Object.values(materials).forEach((mat) => {

@@ -80,7 +80,9 @@ export default function Profile({
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Google account email</Label>
+                                    <Label htmlFor="email">
+                                        Google account email
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -96,7 +98,9 @@ export default function Profile({
                                     <Input
                                         id="nickname"
                                         name="nickname"
-                                        defaultValue={String(auth.user.nickname ?? '')}
+                                        defaultValue={String(
+                                            auth.user.nickname ?? '',
+                                        )}
                                         placeholder="What people call you"
                                         autoComplete="off"
                                     />
@@ -109,7 +113,9 @@ export default function Profile({
                                         id="phone"
                                         name="phone"
                                         type="tel"
-                                        defaultValue={String(auth.user.phone ?? '')}
+                                        defaultValue={String(
+                                            auth.user.phone ?? '',
+                                        )}
                                         placeholder="(555) 555-5555"
                                         autoComplete="tel"
                                     />
@@ -120,40 +126,51 @@ export default function Profile({
                                     <Label htmlFor="dorm_location">Dorm</Label>
                                     <Select
                                         name="dorm_location"
-                                        defaultValue={String(auth.user.dorm_location ?? '')}
+                                        defaultValue={String(
+                                            auth.user.dorm_location ?? '',
+                                        )}
                                     >
                                         <SelectTrigger id="dorm_location">
                                             <SelectValue placeholder="Select your dorm" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {DORM_LOCATIONS.map((dorm) => (
-                                                <SelectItem key={dorm} value={dorm}>
+                                                <SelectItem
+                                                    key={dorm}
+                                                    value={dorm}
+                                                >
                                                     {dorm}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    <InputError message={errors.dorm_location} />
+                                    <InputError
+                                        message={errors.dorm_location}
+                                    />
                                 </div>
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="grade_year">Grade</Label>
                                     <Select
                                         name="grade_year"
-                                        defaultValue={String(auth.user.grade_year ?? '')}
+                                        defaultValue={String(
+                                            auth.user.grade_year ?? '',
+                                        )}
                                     >
                                         <SelectTrigger id="grade_year">
                                             <SelectValue placeholder="Select your grade" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {GRADE_YEARS.map((currentGradeYear) => (
-                                                <SelectItem
-                                                    key={currentGradeYear}
-                                                    value={currentGradeYear}
-                                                >
-                                                    {currentGradeYear}
-                                                </SelectItem>
-                                            ))}
+                                            {GRADE_YEARS.map(
+                                                (currentGradeYear) => (
+                                                    <SelectItem
+                                                        key={currentGradeYear}
+                                                        value={currentGradeYear}
+                                                    >
+                                                        {currentGradeYear}
+                                                    </SelectItem>
+                                                ),
+                                            )}
                                         </SelectContent>
                                     </Select>
                                     <InputError message={errors.grade_year} />
@@ -162,10 +179,15 @@ export default function Profile({
                                 {!isProfileComplete && (
                                     <Alert>
                                         <BookOpen />
-                                        <AlertTitle>Read the rules first</AlertTitle>
+                                        <AlertTitle>
+                                            Read the rules first
+                                        </AlertTitle>
                                         <AlertDescription>
                                             Make sure you've read the{' '}
-                                            <a href="/forks-game-rules.pdf" target="_blank">
+                                            <a
+                                                href="/forks-game-rules.pdf"
+                                                target="_blank"
+                                            >
                                                 full game rules
                                             </a>{' '}
                                             before joining.
@@ -178,7 +200,9 @@ export default function Profile({
                                         disabled={processing}
                                         data-test="update-profile-button"
                                     >
-                                        {isProfileComplete ? 'Save changes' : 'Complete setup'}
+                                        {isProfileComplete
+                                            ? 'Save changes'
+                                            : 'Complete setup'}
                                     </Button>
 
                                     <Transition

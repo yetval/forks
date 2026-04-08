@@ -1,13 +1,29 @@
 import { Form, Head, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
-import { approve, contest, store as killStore } from '@/actions/App/Http/Controllers/KillController';
+import {
+    approve,
+    contest,
+    store as killStore,
+} from '@/actions/App/Http/Controllers/KillController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
@@ -58,7 +74,9 @@ export default function Targets({
                     <Card className="w-full max-w-md">
                         <CardHeader className="text-center">
                             <CardTitle>
-                                {game.stage === 'pregame' ? 'Game Not Started' : 'Game Over'}
+                                {game.stage === 'pregame'
+                                    ? 'Game Not Started'
+                                    : 'Game Over'}
                             </CardTitle>
                             <CardDescription>
                                 {game.stage === 'pregame'
@@ -104,28 +122,48 @@ function KilledView({ kill }: { kill: KillRecord | null }) {
     return (
         <Card className="w-full max-w-md">
             <CardHeader className="text-center">
-                <CardTitle className="text-red-600 dark:text-red-400">You&apos;ve Been Eliminated</CardTitle>
+                <CardTitle className="text-red-600 dark:text-red-400">
+                    You&apos;ve Been Eliminated
+                </CardTitle>
                 <CardDescription>Killed by {killerName}</CardDescription>
             </CardHeader>
             {kill && !kill.approved && !kill.contested && (
                 <CardContent className="flex flex-col gap-4">
                     {showContestForm ? (
-                        <Form {...contest.form()} resetOnSuccess onSuccess={() => setShowContestForm(false)}>
+                        <Form
+                            {...contest.form()}
+                            resetOnSuccess
+                            onSuccess={() => setShowContestForm(false)}
+                        >
                             {({ errors, processing }) => (
                                 <div className="flex flex-col gap-3">
-                                    <Label htmlFor="contest_reason">Why are you contesting this kill?</Label>
+                                    <Label htmlFor="contest_reason">
+                                        Why are you contesting this kill?
+                                    </Label>
                                     <Textarea
                                         id="contest_reason"
                                         name="contest_reason"
                                         rows={4}
                                         placeholder="Describe why this kill is invalid..."
                                     />
-                                    <InputError message={errors.contest_reason} />
+                                    <InputError
+                                        message={errors.contest_reason}
+                                    />
                                     <div className="flex gap-2">
-                                        <Button type="submit" variant="destructive" disabled={processing}>
+                                        <Button
+                                            type="submit"
+                                            variant="destructive"
+                                            disabled={processing}
+                                        >
                                             Submit Contest
                                         </Button>
-                                        <Button type="button" variant="outline" onClick={() => setShowContestForm(false)}>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() =>
+                                                setShowContestForm(false)
+                                            }
+                                        >
                                             Cancel
                                         </Button>
                                     </div>
@@ -135,11 +173,12 @@ function KilledView({ kill }: { kill: KillRecord | null }) {
                     ) : (
                         <div className="flex justify-center gap-3">
                             <Form {...approve.form()}>
-                                <Button type="submit">
-                                    Approve Kill
-                                </Button>
+                                <Button type="submit">Approve Kill</Button>
                             </Form>
-                            <Button variant="destructive" onClick={() => setShowContestForm(true)}>
+                            <Button
+                                variant="destructive"
+                                onClick={() => setShowContestForm(true)}
+                            >
                                 Contest Kill
                             </Button>
                         </div>
@@ -147,12 +186,12 @@ function KilledView({ kill }: { kill: KillRecord | null }) {
                 </CardContent>
             )}
             {kill?.approved && (
-                <CardContent className="text-muted-foreground text-center text-sm">
+                <CardContent className="text-center text-sm text-muted-foreground">
                     Kill approved. You&apos;re out.
                 </CardContent>
             )}
             {kill?.contested && (
-                <CardContent className="text-muted-foreground text-center text-sm">
+                <CardContent className="text-center text-sm text-muted-foreground">
                     Kill contested. An admin will review.
                 </CardContent>
             )}
@@ -167,7 +206,10 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
 
     useEffect(() => {
         const updateViewportSize = () => {
-            setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+            setViewportSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
         };
         updateViewportSize();
         window.addEventListener('resize', updateViewportSize);
@@ -176,19 +218,29 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
 
     useEffect(() => {
         if (!showCelebration) return;
-        const timeoutId = window.setTimeout(() => setShowCelebration(false), 10000);
+        const timeoutId = window.setTimeout(
+            () => setShowCelebration(false),
+            10000,
+        );
         return () => window.clearTimeout(timeoutId);
     }, [showCelebration]);
 
     return (
         <>
-            {showCelebration && viewportSize.width > 0 && viewportSize.height > 0 && (
-                <Confetti width={viewportSize.width} height={viewportSize.height} />
-            )}
+            {showCelebration &&
+                viewportSize.width > 0 &&
+                viewportSize.height > 0 && (
+                    <Confetti
+                        width={viewportSize.width}
+                        height={viewportSize.height}
+                    />
+                )}
             <Card className="w-full max-w-md">
                 <CardHeader className="text-center">
                     <CardDescription>Free For All</CardDescription>
-                    <CardTitle className="text-2xl">Select Your Target</CardTitle>
+                    <CardTitle className="text-2xl">
+                        Select Your Target
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                     {showCelebration && (
@@ -210,14 +262,23 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
                         {({ errors, processing }) => (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="victim_id">Choose a player to eliminate</Label>
-                                    <Select name="victim_id" value={victimId} onValueChange={setVictimId}>
+                                    <Label htmlFor="victim_id">
+                                        Choose a player to eliminate
+                                    </Label>
+                                    <Select
+                                        name="victim_id"
+                                        value={victimId}
+                                        onValueChange={setVictimId}
+                                    >
                                         <SelectTrigger id="victim_id">
                                             <SelectValue placeholder="Select a player..." />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {alivePlayers.map((player) => (
-                                                <SelectItem key={player.id} value={String(player.id)}>
+                                                <SelectItem
+                                                    key={player.id}
+                                                    value={String(player.id)}
+                                                >
                                                     {player.name}
                                                 </SelectItem>
                                             ))}
@@ -225,7 +286,10 @@ function FfaTargetView({ alivePlayers }: { alivePlayers: AlivePlayer[] }) {
                                     </Select>
                                     <InputError message={errors.victim_id} />
                                 </div>
-                                <Button type="submit" disabled={!victimId || processing}>
+                                <Button
+                                    type="submit"
+                                    disabled={!victimId || processing}
+                                >
                                     Submit Kill
                                 </Button>
                             </>
@@ -272,17 +336,22 @@ function TargetView({ target }: { target: Target | null }) {
 
     return (
         <>
-            {showCelebration && viewportSize.width > 0 && viewportSize.height > 0 && (
-                <Confetti
-                    width={viewportSize.width}
-                    height={viewportSize.height}
-                />
-            )}
+            {showCelebration &&
+                viewportSize.width > 0 &&
+                viewportSize.height > 0 && (
+                    <Confetti
+                        width={viewportSize.width}
+                        height={viewportSize.height}
+                    />
+                )}
             <Card className="relative w-full max-w-md">
                 <CardHeader className="text-center">
                     <CardDescription>Your Target</CardDescription>
                     <CardTitle
-                        className={cn('cursor-pointer text-2xl transition duration-150', !isVisible && 'blur-xl select-none')}
+                        className={cn(
+                            'cursor-pointer text-2xl transition duration-150',
+                            !isVisible && 'blur-xl select-none',
+                        )}
                         onMouseEnter={() => setIsVisible(true)}
                         onMouseLeave={() => setIsVisible(false)}
                         onClick={() => setIsVisible((v) => !v)}
@@ -290,7 +359,9 @@ function TargetView({ target }: { target: Target | null }) {
                         {targetName}
                     </CardTitle>
                     <CardDescription>
-                        {isVisible ? 'Move away to hide' : 'Hover or tap to reveal'}
+                        {isVisible
+                            ? 'Move away to hide'
+                            : 'Hover or tap to reveal'}
                     </CardDescription>
                 </CardHeader>
                 {target && (
@@ -315,19 +386,34 @@ function TargetView({ target }: { target: Target | null }) {
                                 <>
                                     <div className="grid gap-2">
                                         <Label htmlFor="verification_name">
-                                            Your target&apos;s next target&apos;s full name
+                                            Your target&apos;s next
+                                            target&apos;s full name
                                         </Label>
                                         <Input
                                             id="verification_name"
                                             name="verification_name"
                                             value={verificationName}
-                                            onChange={(e) => setVerificationName(e.target.value)}
+                                            onChange={(e) =>
+                                                setVerificationName(
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="Enter full name to verify"
                                         />
-                                        <InputError message={errors.verification_name} />
+                                        <InputError
+                                            message={errors.verification_name}
+                                        />
                                     </div>
-                                    <Button type="submit" disabled={!verificationName.trim() || processing}>
-                                        {showCelebration && !hasErrors ? 'Confirmed' : 'Submit Kill'}
+                                    <Button
+                                        type="submit"
+                                        disabled={
+                                            !verificationName.trim() ||
+                                            processing
+                                        }
+                                    >
+                                        {showCelebration && !hasErrors
+                                            ? 'Confirmed'
+                                            : 'Submit Kill'}
                                     </Button>
                                 </>
                             )}

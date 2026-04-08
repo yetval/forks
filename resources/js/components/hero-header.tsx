@@ -29,20 +29,30 @@ export default function HeroHeader() {
                 <AppLogo />
             </Link>
             <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-3">
+                <div className="hidden items-center gap-3 sm:flex">
                     <Button variant="link" size="sm" asChild>
-                        <Link href={leaderboard().url} className="text-white hover:text-white">
+                        <Link
+                            href={leaderboard().url}
+                            className="text-white hover:text-white"
+                        >
                             Leaderboard
                         </Link>
                     </Button>
                     <Button variant="link" size="sm" asChild>
-                        <a href="/forks-game-rules.pdf" target="_blank" className="text-white hover:text-white">
+                        <a
+                            href="/forks-game-rules.pdf"
+                            target="_blank"
+                            className="text-white hover:text-white"
+                        >
                             Rules
                         </a>
                     </Button>
                     {auth.user && (
                         <Button variant="link" size="sm" asChild>
-                            <Link href={dashboard().url} className="text-white hover:text-white">
+                            <Link
+                                href={dashboard().url}
+                                className="text-white hover:text-white"
+                            >
                                 Dashboard
                             </Link>
                         </Button>
@@ -52,9 +62,15 @@ export default function HeroHeader() {
                 {auth.user ? (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="size-10 rounded-full p-1">
+                            <Button
+                                variant="ghost"
+                                className="size-10 rounded-full p-1"
+                            >
                                 <Avatar className="size-8 overflow-hidden rounded-full">
-                                    <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
+                                    <AvatarImage
+                                        src={auth.user.avatar}
+                                        alt={auth.user.name}
+                                    />
                                     <AvatarFallback className="rounded-lg bg-zinc-700 text-white">
                                         {getInitials(auth.user.name)}
                                     </AvatarFallback>
@@ -71,7 +87,12 @@ export default function HeroHeader() {
                     </Button>
                 ) : null}
 
-                <Button variant="outline" size="sm" asChild className="sm:hidden">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="sm:hidden"
+                >
                     <a href="/forks-game-rules.pdf" target="_blank">
                         Rules
                     </a>
@@ -79,28 +100,48 @@ export default function HeroHeader() {
 
                 <Sheet>
                     <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon" className="sm:hidden text-white">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-white sm:hidden"
+                        >
                             <Menu className="size-5" />
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-64 bg-zinc-950 border-zinc-800">
+                    <SheetContent
+                        side="right"
+                        className="w-64 border-zinc-800 bg-zinc-950"
+                    >
                         <SheetTitle className="sr-only">Navigation</SheetTitle>
                         <SheetHeader className="text-left">
                             <AppLogo />
                         </SheetHeader>
                         <nav className="mt-8 flex flex-col gap-4 px-4">
-                            <Link href={leaderboard().url} className="text-lg text-zinc-200">
+                            <Link
+                                href={leaderboard().url}
+                                className="text-lg text-zinc-200"
+                            >
                                 Leaderboard
                             </Link>
-                            <a href="/forks-game-rules.pdf" target="_blank" className="text-lg text-zinc-200">
+                            <a
+                                href="/forks-game-rules.pdf"
+                                target="_blank"
+                                className="text-lg text-zinc-200"
+                            >
                                 Rules
                             </a>
                             {auth.user ? (
-                                <Link href={dashboard().url} className="text-lg text-zinc-200">
+                                <Link
+                                    href={dashboard().url}
+                                    className="text-lg text-zinc-200"
+                                >
                                     Dashboard
                                 </Link>
                             ) : game.auth_open ? (
-                                <Link href="/login" className="text-lg text-zinc-200">
+                                <Link
+                                    href="/login"
+                                    className="text-lg text-zinc-200"
+                                >
                                     Log in
                                 </Link>
                             ) : null}

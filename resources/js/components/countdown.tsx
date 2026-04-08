@@ -5,7 +5,10 @@ interface CountdownProps {
     label?: string;
 }
 
-export default function Countdown({ target, label = 'Forks begin in' }: CountdownProps) {
+export default function Countdown({
+    target,
+    label = 'Forks begin in',
+}: CountdownProps) {
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(target));
 
     useEffect(() => {
@@ -18,10 +21,10 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
     if (timeLeft.total <= 0) {
         return (
             <div className="text-center">
-                <p className="text-sm font-extralight uppercase tracking-widest text-zinc-400">
+                <p className="text-sm font-extralight tracking-widest text-zinc-400 uppercase">
                     The game is
                 </p>
-                <p className="mt-2 text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-white">
+                <p className="mt-2 text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl">
                     LIVE
                 </p>
             </div>
@@ -30,7 +33,9 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
 
     return (
         <div className="text-center">
-            <p className="text-xl font-extralight uppercase tracking-widest text-zinc-300">{label}</p>
+            <p className="text-xl font-extralight tracking-widest text-zinc-300 uppercase">
+                {label}
+            </p>
             <div className="mt-6 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
                 <TimeUnit value={timeLeft.days} label="Days" />
                 <Separator />
@@ -47,23 +52,28 @@ export default function Countdown({ target, label = 'Forks begin in' }: Countdow
 function TimeUnit({ value, label }: { value: number; label: string }) {
     return (
         <div className="flex flex-col items-center">
-            <span
-                className="text-4xl sm:text-5xl md:text-7xl font-bold tabular-nums text-white"
-            >
+            <span className="text-4xl font-bold text-white tabular-nums sm:text-5xl md:text-7xl">
                 {String(value).padStart(2, '0')}
             </span>
-            <span className="mt-2 text-sm font-extralight uppercase tracking-wider text-zinc-500">{label}</span>
+            <span className="mt-2 text-sm font-extralight tracking-wider text-zinc-500 uppercase">
+                {label}
+            </span>
         </div>
     );
 }
 
 function Separator() {
-    return <span className="text-3xl sm:text-4xl md:text-5xl font-light text-zinc-600">:</span>;
+    return (
+        <span className="text-3xl font-light text-zinc-600 sm:text-4xl md:text-5xl">
+            :
+        </span>
+    );
 }
 
 function getTimeLeft(target: Date) {
     const diff = target.getTime() - Date.now();
-    if (diff <= 0) return { total: 0, days: 0, hours: 0, minutes: 0, seconds: 0 };
+    if (diff <= 0)
+        return { total: 0, days: 0, hours: 0, minutes: 0, seconds: 0 };
     return {
         total: diff,
         days: Math.floor(diff / 86400000),

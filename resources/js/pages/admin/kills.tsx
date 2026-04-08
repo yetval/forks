@@ -1,5 +1,8 @@
 import { Form, Head, usePage } from '@inertiajs/react';
-import { dismiss, revert } from '@/actions/App/Http/Controllers/Admin/KillController';
+import {
+    dismiss,
+    revert,
+} from '@/actions/App/Http/Controllers/Admin/KillController';
 import AlertError from '@/components/alert-error';
 import {
     AlertDialog,
@@ -55,7 +58,9 @@ export default function Kills({ kills }: { kills: KillRecord[] }) {
                     </CardHeader>
                     <CardContent>
                         {kills.length === 0 ? (
-                            <p className="text-muted-foreground text-sm">No kills yet.</p>
+                            <p className="text-sm text-muted-foreground">
+                                No kills yet.
+                            </p>
                         ) : (
                             <div className="rounded-xl border">
                                 <Table>
@@ -64,53 +69,97 @@ export default function Kills({ kills }: { kills: KillRecord[] }) {
                                             <TableHead>Killer</TableHead>
                                             <TableHead>Victim</TableHead>
                                             <TableHead>Status</TableHead>
-                                            <TableHead>Contest Reason</TableHead>
+                                            <TableHead>
+                                                Contest Reason
+                                            </TableHead>
                                             <TableHead>Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {kills.map((kill) => (
                                             <TableRow key={kill.id}>
-                                                <TableCell>{kill.killer.name}</TableCell>
-                                                <TableCell>{kill.victim.name}</TableCell>
+                                                <TableCell>
+                                                    {kill.killer.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {kill.victim.name}
+                                                </TableCell>
                                                 <TableCell>
                                                     <div className="flex flex-wrap gap-1">
                                                         {kill.is_ffa && (
-                                                            <Badge variant="secondary">FFA</Badge>
+                                                            <Badge variant="secondary">
+                                                                FFA
+                                                            </Badge>
                                                         )}
                                                         {kill.approved && (
-                                                            <Badge variant="default">Approved</Badge>
+                                                            <Badge variant="default">
+                                                                Approved
+                                                            </Badge>
                                                         )}
                                                         {kill.contested && (
-                                                            <Badge variant="destructive">Contested</Badge>
+                                                            <Badge variant="destructive">
+                                                                Contested
+                                                            </Badge>
                                                         )}
-                                                        {!kill.approved && !kill.contested && (
-                                                            <Badge variant="outline">Pending</Badge>
-                                                        )}
+                                                        {!kill.approved &&
+                                                            !kill.contested && (
+                                                                <Badge variant="outline">
+                                                                    Pending
+                                                                </Badge>
+                                                            )}
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="text-muted-foreground text-sm">
+                                                <TableCell className="text-sm text-muted-foreground">
                                                     {kill.contest_reason ?? '—'}
                                                 </TableCell>
                                                 <TableCell>
                                                     <div className="flex gap-2">
                                                         {kill.contested && (
                                                             <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
-                                                                    <Button variant="outline" size="sm">
+                                                                <AlertDialogTrigger
+                                                                    asChild
+                                                                >
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        size="sm"
+                                                                    >
                                                                         Dismiss
                                                                     </Button>
                                                                 </AlertDialogTrigger>
                                                                 <AlertDialogContent>
                                                                     <AlertDialogHeader>
-                                                                        <AlertDialogTitle>Dismiss Contest</AlertDialogTitle>
+                                                                        <AlertDialogTitle>
+                                                                            Dismiss
+                                                                            Contest
+                                                                        </AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            This will dismiss {kill.victim.name}'s contest and confirm the kill as valid.
+                                                                            This
+                                                                            will
+                                                                            dismiss{' '}
+                                                                            {
+                                                                                kill
+                                                                                    .victim
+                                                                                    .name
+                                                                            }
+                                                                            's
+                                                                            contest
+                                                                            and
+                                                                            confirm
+                                                                            the
+                                                                            kill
+                                                                            as
+                                                                            valid.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                        <Form {...dismiss.form(kill.id)}>
+                                                                        <AlertDialogCancel>
+                                                                            Cancel
+                                                                        </AlertDialogCancel>
+                                                                        <Form
+                                                                            {...dismiss.form(
+                                                                                kill.id,
+                                                                            )}
+                                                                        >
                                                                             <AlertDialogAction type="submit">
                                                                                 Dismiss
                                                                             </AlertDialogAction>
@@ -120,21 +169,53 @@ export default function Kills({ kills }: { kills: KillRecord[] }) {
                                                             </AlertDialog>
                                                         )}
                                                         <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
-                                                                <Button variant="destructive" size="sm">
+                                                            <AlertDialogTrigger
+                                                                asChild
+                                                            >
+                                                                <Button
+                                                                    variant="destructive"
+                                                                    size="sm"
+                                                                >
                                                                     Revert
                                                                 </Button>
                                                             </AlertDialogTrigger>
                                                             <AlertDialogContent>
                                                                 <AlertDialogHeader>
-                                                                    <AlertDialogTitle>Revert Kill</AlertDialogTitle>
+                                                                    <AlertDialogTitle>
+                                                                        Revert
+                                                                        Kill
+                                                                    </AlertDialogTitle>
                                                                     <AlertDialogDescription>
-                                                                        This will restore {kill.victim.name} to alive status and reset target assignments. This cannot be undone.
+                                                                        This
+                                                                        will
+                                                                        restore{' '}
+                                                                        {
+                                                                            kill
+                                                                                .victim
+                                                                                .name
+                                                                        }{' '}
+                                                                        to alive
+                                                                        status
+                                                                        and
+                                                                        reset
+                                                                        target
+                                                                        assignments.
+                                                                        This
+                                                                        cannot
+                                                                        be
+                                                                        undone.
                                                                     </AlertDialogDescription>
                                                                 </AlertDialogHeader>
                                                                 <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                    <Form {...revert.form(kill.id)} method="delete">
+                                                                    <AlertDialogCancel>
+                                                                        Cancel
+                                                                    </AlertDialogCancel>
+                                                                    <Form
+                                                                        {...revert.form(
+                                                                            kill.id,
+                                                                        )}
+                                                                        method="delete"
+                                                                    >
                                                                         <AlertDialogAction type="submit">
                                                                             Revert
                                                                         </AlertDialogAction>

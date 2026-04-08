@@ -10,12 +10,15 @@ const SCRAMBLE_SPEED = 0.06;
 const LENGTH_CHANGE_SPEED = 0.5;
 
 function randomLength(): number {
-    return MIN_LENGTH + Math.floor(Math.random() * (MAX_LENGTH - MIN_LENGTH + 1));
+    return (
+        MIN_LENGTH + Math.floor(Math.random() * (MAX_LENGTH - MIN_LENGTH + 1))
+    );
 }
 
 function randomString(length: number): string {
-    return Array.from({ length }, () =>
-        CHARSET[Math.floor(Math.random() * CHARSET.length)],
+    return Array.from(
+        { length },
+        () => CHARSET[Math.floor(Math.random() * CHARSET.length)],
     ).join('');
 }
 
