@@ -1,6 +1,8 @@
 import { Transition } from '@headlessui/react';
 import { Form, Head, usePage } from '@inertiajs/react';
+import { BookOpen } from 'lucide-react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -156,6 +158,20 @@ export default function Profile({
                                     </Select>
                                     <InputError message={errors.grade_year} />
                                 </div>
+
+                                {!isProfileComplete && (
+                                    <Alert>
+                                        <BookOpen />
+                                        <AlertTitle>Read the rules first</AlertTitle>
+                                        <AlertDescription>
+                                            Make sure you've read the{' '}
+                                            <a href="/forks-game-rules.pdf" target="_blank">
+                                                full game rules
+                                            </a>{' '}
+                                            before joining.
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
 
                                 <div className="flex items-center gap-4">
                                     <Button
