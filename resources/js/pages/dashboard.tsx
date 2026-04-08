@@ -1,6 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
 import { Activity, type LucideIcon, MoonStar, ShieldMinus, Skull, Sun, Sunrise, Sword, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
@@ -121,11 +121,7 @@ export default function Dashboard({
     superlatives,
 }: DashboardProps) {
     const { auth } = usePage().props;
-    const [greeting, setGreeting] = useState(() => getGreetingDetails(12));
-
-    useEffect(() => {
-        setGreeting(getGreetingDetails(new Date().getHours()));
-    }, []);
+    const [greeting] = useState(() => getGreetingDetails(new Date().getHours()));
 
     const GreetingIcon = greeting.icon;
 
