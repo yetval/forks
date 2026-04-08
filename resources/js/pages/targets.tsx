@@ -282,12 +282,16 @@ function TargetView({ target }: { target: Target | null }) {
                 <CardHeader className="text-center">
                     <CardDescription>Your Target</CardDescription>
                     <CardTitle
-                        className={cn('text-2xl transition duration-150', !isVisible && 'blur-xl')}
+                        className={cn('cursor-pointer text-2xl transition duration-150', !isVisible && 'blur-xl select-none')}
                         onMouseEnter={() => setIsVisible(true)}
                         onMouseLeave={() => setIsVisible(false)}
+                        onClick={() => setIsVisible((v) => !v)}
                     >
                         {targetName}
                     </CardTitle>
+                    <CardDescription>
+                        {isVisible ? 'Move away to hide' : 'Hover or tap to reveal'}
+                    </CardDescription>
                 </CardHeader>
                 {target && (
                     <CardContent>

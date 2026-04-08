@@ -15,6 +15,9 @@ COPY . .
 COPY --from=composer-stage /app/vendor ./vendor
 COPY --from=composer-stage /app/bootstrap/cache ./bootstrap/cache
 
+ARG VITE_APP_NAME=Forks
+ENV VITE_APP_NAME=${VITE_APP_NAME}
+
 RUN npm ci && npm run build
 
 FROM serversideup/php:8.4-fpm-nginx AS production

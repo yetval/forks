@@ -78,7 +78,7 @@ test('existing users can sign in through google when auth is open', function () 
 
     $user = User::factory()->create([
         'google_id' => 'existing-google-id',
-        'email' => 'existing@ncssm.edu',
+        'email' => 'existing26d@ncssm.edu',
         'profile_completed' => true,
     ]);
 
@@ -96,7 +96,7 @@ test('existing users can sign in through google when auth is open', function () 
 
         public function getEmail(): string
         {
-            return 'existing@ncssm.edu';
+            return 'existing26d@ncssm.edu';
         }
     };
 

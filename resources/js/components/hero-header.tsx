@@ -71,6 +71,12 @@ export default function HeroHeader() {
                     </Button>
                 ) : null}
 
+                <Button variant="outline" size="sm" asChild className="sm:hidden">
+                    <a href="/forks-game-rules.pdf" target="_blank">
+                        Rules
+                    </a>
+                </Button>
+
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className="sm:hidden text-white">

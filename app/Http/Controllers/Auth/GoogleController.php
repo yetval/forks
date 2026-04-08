@@ -31,6 +31,10 @@ class GoogleController extends Controller
             return to_route('login')->with('status', 'You must use an NCSSM email to log in.');
         }
 
+        if (! $isAdmin && ! str_contains($googleUser->getEmail(), '26')) {
+            return to_route('login')->with('status', 'Only class of 2026 students can sign up.');
+        }
+
         $user = User::query()
             ->where('google_id', $googleUser->getId())
             ->orWhere('email', $googleUser->getEmail())

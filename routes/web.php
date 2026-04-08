@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KillController;
 use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\StandingsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,6 +20,7 @@ Route::get('/', function () {
 Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
 
 Route::middleware(['auth', 'profile.completed'])->group(function () {
+    Route::get('standings', [StandingsController::class, 'index'])->name('standings');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('targets', [KillController::class, 'index'])->name('targets');
     Route::post('/kill', [KillController::class, 'store'])->name('kill.store');
