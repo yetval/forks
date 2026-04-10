@@ -1,6 +1,9 @@
 import type { RequestPayload } from '@inertiajs/core';
 import { Head, router, usePage } from '@inertiajs/react';
-import { enableFfa, update } from '@/actions/App/Http/Controllers/Admin/GameController';
+import {
+    enableFfa,
+    update,
+} from '@/actions/App/Http/Controllers/Admin/GameController';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,7 +16,13 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Toggle } from '@/components/ui/toggle';
 import AppLayout from '@/layouts/app-layout';
@@ -34,23 +43,29 @@ const STAGES = [
     {
         value: 'pregame',
         label: 'Pregame',
-        description: 'Set up the game. Open logins so players can register and complete their profiles.',
+        description:
+            'Set up the game. Open logins so players can register and complete their profiles.',
         advanceLabel: 'Start Game',
-        advanceDescription: 'This will move the game to the running stage. Make sure targets are assigned.',
+        advanceDescription:
+            'This will move the game to the running stage. Make sure targets are assigned.',
     },
     {
         value: 'running',
         label: 'Running',
-        description: 'Targets are assigned and eliminations are active. The game is live.',
+        description:
+            'Targets are assigned and eliminations are active. The game is live.',
         advanceLabel: 'End Game',
-        advanceDescription: 'This will end the game. Players will see final results.',
+        advanceDescription:
+            'This will end the game. Players will see final results.',
     },
     {
         value: 'postgame',
         label: 'Postgame',
-        description: 'Game over. Final results and stats are visible to all players.',
+        description:
+            'Game over. Final results and stats are visible to all players.',
         advanceLabel: 'Reset to Pregame',
-        advanceDescription: 'This will reset the game back to the pregame stage.',
+        advanceDescription:
+            'This will reset the game back to the pregame stage.',
     },
 ] as const;
 
@@ -68,18 +83,20 @@ function ConfirmButton({
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button>
-                    {children}
-                </Button>
+                <Button>{children}</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
-                    <AlertDialogDescription>{description}</AlertDialogDescription>
+                    <AlertDialogDescription>
+                        {description}
+                    </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={onConfirm}>
+                        Continue
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
@@ -106,19 +123,29 @@ export default function Game({ stats }: { stats: GameStats }) {
                     <Card className="py-4">
                         <CardContent className="text-center">
                             <p className="text-3xl font-bold">{stats.total}</p>
-                            <p className="text-muted-foreground text-sm">Total Players</p>
+                            <p className="text-sm text-muted-foreground">
+                                Total Players
+                            </p>
                         </CardContent>
                     </Card>
                     <Card className="py-4">
                         <CardContent className="text-center">
-                            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.alive}</p>
-                            <p className="text-muted-foreground text-sm">Alive</p>
+                            <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                                {stats.alive}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                Alive
+                            </p>
                         </CardContent>
                     </Card>
                     <Card className="py-4">
                         <CardContent className="text-center">
-                            <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.dead}</p>
-                            <p className="text-muted-foreground text-sm">Dead</p>
+                            <p className="text-3xl font-bold text-red-600 dark:text-red-400">
+                                {stats.dead}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                Dead
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
@@ -131,23 +158,30 @@ export default function Game({ stats }: { stats: GameStats }) {
                                 <Card
                                     key={stage.value}
                                     className={
-                                        isCurrent ? 'border border-primary ring-primary/20 ring-2' : undefined
+                                        isCurrent
+                                            ? 'border border-primary ring-2 ring-primary/20'
+                                            : undefined
                                     }
                                 >
                                     <CardHeader>
                                         <div className="flex items-center gap-2">
                                             <div
                                                 className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium ${
-                                                    isCurrent && 'bg-primary text-primary-foreground'
+                                                    isCurrent &&
+                                                    'bg-primary text-primary-foreground'
                                                 }`}
                                             >
                                                 {i + 1}
                                             </div>
-                                            <CardTitle className="text-sm">{stage.label}</CardTitle>
+                                            <CardTitle className="text-sm">
+                                                {stage.label}
+                                            </CardTitle>
                                         </div>
                                     </CardHeader>
                                     <CardContent>
-                                        <CardDescription>{stage.description}</CardDescription>
+                                        <CardDescription>
+                                            {stage.description}
+                                        </CardDescription>
                                     </CardContent>
                                 </Card>
                             );
@@ -158,7 +192,9 @@ export default function Game({ stats }: { stats: GameStats }) {
                         <ConfirmButton
                             title={currentStage.advanceLabel}
                             description={currentStage.advanceDescription}
-                            onConfirm={() => postUpdate({ stage: nextStage.value })}
+                            onConfirm={() =>
+                                postUpdate({ stage: nextStage.value })
+                            }
                         >
                             {currentStage.advanceLabel}
                         </ConfirmButton>
@@ -170,11 +206,16 @@ export default function Game({ stats }: { stats: GameStats }) {
                 <Card>
                     <CardHeader>
                         <CardTitle>Free For All</CardTitle>
-                        <CardDescription>Enable FFA mode — any player can eliminate any other player. This cannot be undone.</CardDescription>
+                        <CardDescription>
+                            Enable FFA mode — any player can eliminate any other
+                            player. This cannot be undone.
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         {game.ffa ? (
-                            <Button disabled variant="secondary">FFA Active</Button>
+                            <Button disabled variant="secondary">
+                                FFA Active
+                            </Button>
                         ) : (
                             <ConfirmButton
                                 title="Enable Free For All"
@@ -192,14 +233,21 @@ export default function Game({ stats }: { stats: GameStats }) {
                 <Card>
                     <CardHeader>
                         <CardTitle>Real Names</CardTitle>
-                        <CardDescription>Show real names alongside nicknames on the public leaderboard</CardDescription>
+                        <CardDescription>
+                            Show real names alongside nicknames on the public
+                            leaderboard
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center justify-between">
-                            <span className="text-sm">{game.show_real_names ? 'Shown' : 'Hidden'}</span>
+                            <span className="text-sm">
+                                {game.show_real_names ? 'Shown' : 'Hidden'}
+                            </span>
                             <Toggle
                                 pressed={game.show_real_names}
-                                onPressedChange={(pressed) => postUpdate({ show_real_names: pressed })}
+                                onPressedChange={(pressed) =>
+                                    postUpdate({ show_real_names: pressed })
+                                }
                                 aria-label="Toggle real names"
                             >
                                 {game.show_real_names ? 'On' : 'Off'}
@@ -213,14 +261,20 @@ export default function Game({ stats }: { stats: GameStats }) {
                 <Card>
                     <CardHeader>
                         <CardTitle>Player Logins</CardTitle>
-                        <CardDescription>Allow players to log in and register</CardDescription>
+                        <CardDescription>
+                            Allow players to log in and register
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center justify-between">
-                            <span className="text-sm">{game.auth_open ? 'Open' : 'Closed'}</span>
+                            <span className="text-sm">
+                                {game.auth_open ? 'Open' : 'Closed'}
+                            </span>
                             <Toggle
                                 pressed={game.auth_open}
-                                onPressedChange={(pressed) => postUpdate({ auth_open: pressed })}
+                                onPressedChange={(pressed) =>
+                                    postUpdate({ auth_open: pressed })
+                                }
                                 aria-label="Toggle player logins"
                             >
                                 {game.auth_open ? 'On' : 'Off'}

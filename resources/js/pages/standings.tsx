@@ -1,6 +1,13 @@
 import { Head } from '@inertiajs/react';
 import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { standings } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
@@ -40,26 +47,50 @@ export default function Standings({ players }: { players: Player[] }) {
                     </TableHeader>
                     <TableBody>
                         {players.map((player, i) => (
-                            <TableRow key={player.id} className={player.alive ? undefined : 'text-muted-foreground'}>
+                            <TableRow
+                                key={player.id}
+                                className={
+                                    player.alive
+                                        ? undefined
+                                        : 'text-muted-foreground'
+                                }
+                            >
                                 <TableCell>{i + 1}</TableCell>
-                                <TableCell className={player.alive ? 'font-medium' : undefined}>{displayName(player)}</TableCell>
+                                <TableCell
+                                    className={
+                                        player.alive ? 'font-medium' : undefined
+                                    }
+                                >
+                                    {displayName(player)}
+                                </TableCell>
                                 <TableCell>
                                     {player.alive ? (
-                                        <Badge variant="outline" className="border-green-500 text-green-600 dark:text-green-400">
+                                        <Badge
+                                            variant="outline"
+                                            className="border-green-500 text-green-600 dark:text-green-400"
+                                        >
                                             Alive
                                         </Badge>
                                     ) : (
-                                        <Badge variant="outline" className="border-red-500 text-red-600 dark:text-red-400">
+                                        <Badge
+                                            variant="outline"
+                                            className="border-red-500 text-red-600 dark:text-red-400"
+                                        >
                                             Dead
                                         </Badge>
                                     )}
                                 </TableCell>
-                                <TableCell className="text-right">{player.total_kills}</TableCell>
+                                <TableCell className="text-right">
+                                    {player.total_kills}
+                                </TableCell>
                             </TableRow>
                         ))}
                         {players.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-muted-foreground text-center">
+                                <TableCell
+                                    colSpan={4}
+                                    className="text-center text-muted-foreground"
+                                >
                                     No players yet.
                                 </TableCell>
                             </TableRow>

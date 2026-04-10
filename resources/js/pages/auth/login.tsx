@@ -1,5 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '@/layouts/auth-layout';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { CircleAlertIcon } from 'lucide-react';
 import googleSignIn from '@/assets/sign_in_google.svg';
 
 export default function Login({ status }: { status?: string }) {
@@ -12,16 +14,23 @@ export default function Login({ status }: { status?: string }) {
         >
             <Head title="Log in" />
             {status ? (
-                <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                    {status}
-                </div>
+                <Alert variant="destructive">
+                    <CircleAlertIcon />
+                    <AlertDescription>{status}</AlertDescription>
+                </Alert>
             ) : null}
             {game.auth_open ? (
                 <a href="/auth/google" className="flex justify-center">
-                    <img src={googleSignIn} alt="Sign in with Google" height={40} />
+                    <img
+                        src={googleSignIn}
+                        alt="Sign in with Google"
+                        height={40}
+                    />
                 </a>
             ) : (
-                <p className="text-muted-foreground text-center text-sm">Logins are currently closed</p>
+                <p className="text-center text-sm text-muted-foreground">
+                    Logins are currently closed
+                </p>
             )}
         </AuthLayout>
     );
